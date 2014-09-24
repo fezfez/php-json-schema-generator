@@ -27,21 +27,6 @@ class PropertyTypeMapper
     protected $property = null;
 
     /**
-     * defines the primitive types
-     * @link http://tools.ietf.org/html/draft-zyp-json-schema-04#section-3.5
-     * @var array
-     */
-    protected $primitiveTypes = array(
-        self::ARRAY_TYPE   => array('description' => 'A JSON array'),
-        self::BOOLEAN_TYPE => array('description' => 'A JSON boolean'),
-        self::INTEGER_TYPE => array('description' => 'A JSON number without a fraction or exponent part'),
-        self::NUMBER_TYPE  => array('description' => 'A JSON number.  Number includes integer.'),
-        self::NULL_TYPE    => array('description' => 'A JSON null value'),
-        self::OBJECT_TYPE  => array('description' => 'A JSON object'),
-        self::STRING_TYPE  => array('description' => 'A JSON string')
-    );
-
-    /**
      * @param string $property
      */
     public function __construct($property)
@@ -60,6 +45,7 @@ class PropertyTypeMapper
      *
      * @param mixed $property
      * @throws Exceptions\Unmappable
+     * @return string
      */
     public static function map($property)
     {
@@ -84,16 +70,6 @@ class PropertyTypeMapper
             default:
                 throw new UnmappableException("The provided argument property");
         }
-    }
-
-    /**
-     * @param string $property
-     * @return \JSONSchema\Mappers\PropertyTypeMapper
-     */
-    public function setProperty($property)
-    {
-        $this->property = $property;
-        return $this;
     }
 
     /**
