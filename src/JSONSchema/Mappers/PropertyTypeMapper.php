@@ -1,107 +1,106 @@
 <?php
 namespace JSONSchema\Mappers;
 
+use JSONSchema\Mappers\Exceptions\UnmappableException;
+
 /**
- * 
+ *
  * @package JSONSchema\Mappers
  * @author steven
  *
  */
-class PropertyTypeMapper 
+class PropertyTypeMapper
 {
-    
-    // a little redundent but a nice key for hitting the arrays 
-    const ARRAY_TYPE = 'array';
+
+    // a little redundent but a nice key for hitting the arrays
+    const ARRAY_TYPE   = 'array';
     const BOOLEAN_TYPE = 'boolean';
     const INTEGER_TYPE = 'integer';
-    const NUMBER_TYPE = 'number';
-    const NULL_TYPE = 'null';
-    const OBJECT_TYPE = 'object';
-    const STRING_TYPE = 'string';
-    
+    const NUMBER_TYPE  = 'number';
+    const NULL_TYPE    = 'null';
+    const OBJECT_TYPE  = 'object';
+    const STRING_TYPE  = 'string';
+
     /**
-     * 
-     * 
      * @var string
      */
     protected $property = null;
-    
+
     /**
-     * defines the primitive types 
+     * defines the primitive types
      * @link http://tools.ietf.org/html/draft-zyp-json-schema-04#section-3.5
      * @var array
      */
     protected $primitiveTypes = array(
-        'array' => array('description' => 'A JSON array'),
-        'boolean' => array('description' => 'A JSON boolean'),
-        'integer' => array('description' => 'A JSON number without a fraction or exponent part'),
-        'number' => array('description' => 'A JSON number.  Number includes integer.'),
-        'null' => array('description' => 'A JSON null value'),
-        'object' => array('description' => 'A JSON object'),
-        'string' => array('description' => 'A JSON string')
+        self::ARRAY_TYPE   => array('description' => 'A JSON array'),
+        self::BOOLEAN_TYPE => array('description' => 'A JSON boolean'),
+        self::INTEGER_TYPE => array('description' => 'A JSON number without a fraction or exponent part'),
+        self::NUMBER_TYPE  => array('description' => 'A JSON number.  Number includes integer.'),
+        self::NULL_TYPE    => array('description' => 'A JSON null value'),
+        self::OBJECT_TYPE  => array('description' => 'A JSON object'),
+        self::STRING_TYPE  => array('description' => 'A JSON string')
     );
-    
+
     /**
-     * 
      * @param string $property
      */
     public function __construct($property)
     {
-        if(!is_string($property))
+        if (false === is_string($property)) {
             new \InvalidArgumentException("Parameter provided must be a string");
-            
+        }
+
         $this->property = $property;
     }
-    
-    
+
+
     /**
-     * the goal here would be go into a logic tree and work 
-     * from loosest definition to most strict 
-     * 
+     * the goal here would be go into a logic tree and work
+     * from loosest definition to most strict
+     *
      * @param mixed $property
      * @throws Exceptions\Unmappable
      */
-    public static function map( $property)
+    public static function map($property)
     {
 //        if(!is_string($property))
 //            throw new UnmappableException('The provided property must be a string.');
         // need to find a better way to determine what the string is
-        switch ($property)
-        {
-            case (is_float($property)):
-                return PropertyTypeMapper::NUMBER_TYPE;
-            case (is_int($property)):
-                return PropertyTypeMapper::INTEGER_TYPE;
-            case (is_bool($property)):
-                return PropertyTypeMapper::BOOLEAN_TYPE;
-            case (is_array($property)):
-                return PropertyTypeMapper::ARRAY_TYPE;
-            case (is_null($property)):
-                return PropertyTypeMapper::NULL_TYPE;
-            case (is_object($property)):
-                return PropertyTypeMapper::OBJECT_TYPE;
-            case (is_string($property)):
-                return PropertyTypeMapper::STRING_TYPE;
+        switch ($property) {
+            case (is_float($property) === true):
+                return self::NUMBER_TYPE;
+            case (is_int($property) === true):
+                return self::INTEGER_TYPE;
+            case (is_bool($property) === true):
+                return self::BOOLEAN_TYPE;
+            case (is_array($property) === true):
+                return self::ARRAY_TYPE;
+            case (is_null($property) === true):
+                return self::NULL_TYPE;
+            case (is_object($property) === true):
+                return self::OBJECT_TYPE;
+            case (is_string($property) === true):
+                return self::STRING_TYPE;
             default:
                 throw new UnmappableException("The provided argument property");
         }
-            
     }
-    
+
+    /**
+     * @param string $property
+     * @return \JSONSchema\Mappers\PropertyTypeMapper
+     */
     public function setProperty($property)
     {
         $this->property = $property;
         return $this;
     }
-    
+
+    /**
+     * @return string
+     */
     public function getProperty()
     {
         return $this->property();
     }
-    
-    public function getPropertyType()
-    {
-        
-    }
-    
 }

@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="" tests="4" assertions="34" failures="0" errors="0" time="0.375000">
-    <testsuite name="JSONSchema\Tests\GeneratorTest" file="C:\Documents and Settings\Stagiaire\git\php-json-schema-generator\tests\JSONSchema\Tests\GeneratorTest.php" tests="3" assertions="34" failures="0" errors="0" time="0.359375">
-      <testcase name="testCanParseSimple" class="JSONSchema\Tests\GeneratorTest" file="C:\Documents and Settings\Stagiaire\git\php-json-schema-generator\tests\JSONSchema\Tests\GeneratorTest.php" line="22" assertions="10" time="0.140625"/>
-      <testcase name="testFunctionalClassLoad" class="JSONSchema\Tests\GeneratorTest" file="C:\Documents and Settings\Stagiaire\git\php-json-schema-generator\tests\JSONSchema\Tests\GeneratorTest.php" line="46" assertions="5" time="0.046875"/>
-      <testcase name="testCanParseExample2" class="JSONSchema\Tests\GeneratorTest" file="C:\Documents and Settings\Stagiaire\git\php-json-schema-generator\tests\JSONSchema\Tests\GeneratorTest.php" line="70" assertions="19" time="0.171875"/>
+  <testsuite name="" tests="4" assertions="8" failures="1" errors="0" time="0.656250">
+    <testsuite name="JSONSchema\Tests\Parsers\ParserFactory\GetParserTest" file="C:\Documents and Settings\Stagiaire\git\php-json-schema-generator\tests\JSONSchema\Tests\Parsers\ParserFactory\GetParserTest.php" tests="2" assertions="4" failures="0" errors="0" time="0.421875">
+      <testcase name="testThrowExceptionWhenTypeNoValid" class="JSONSchema\Tests\Parsers\ParserFactory\GetParserTest" file="C:\Documents and Settings\Stagiaire\git\php-json-schema-generator\tests\JSONSchema\Tests\Parsers\ParserFactory\GetParserTest.php" line="8" assertions="2" time="0.328125"/>
+      <testcase name="testReturnWhenValid" class="JSONSchema\Tests\Parsers\ParserFactory\GetParserTest" file="C:\Documents and Settings\Stagiaire\git\php-json-schema-generator\tests\JSONSchema\Tests\Parsers\ParserFactory\GetParserTest.php" line="25" assertions="2" time="0.093750"/>
     </testsuite>
-    <testsuite name="JSONSchema\Tests\Parsers\ArrayParserTest" file="C:\Documents and Settings\Stagiaire\git\php-json-schema-generator\tests\JSONSchema\Tests\Parsers\ArrayParserTest.php" tests="1" assertions="0" failures="0" errors="0" time="0.015625">
-      <testcase name="testCanParseArray" class="JSONSchema\Tests\Parsers\ArrayParserTest" file="C:\Documents and Settings\Stagiaire\git\php-json-schema-generator\tests\JSONSchema\Tests\Parsers\ArrayParserTest.php" line="24" assertions="0" time="0.015625"/>
+    <testsuite name="JSONSchema\Tests\SchemaGeneratorFactory\GetInstanceTest" file="C:\Documents and Settings\Stagiaire\git\php-json-schema-generator\tests\JSONSchema\Tests\SchemaGeneratorFactory\GetInstanceTest.php" tests="1" assertions="1" failures="0" errors="0" time="0.046875">
+      <testcase name="testInstance" class="JSONSchema\Tests\SchemaGeneratorFactory\GetInstanceTest" file="C:\Documents and Settings\Stagiaire\git\php-json-schema-generator\tests\JSONSchema\Tests\SchemaGeneratorFactory\GetInstanceTest.php" line="8" assertions="1" time="0.046875"/>
+    </testsuite>
+    <testsuite name="JSONSchema\Tests\SchemaGenerator\ParseTest" file="C:\Documents and Settings\Stagiaire\git\php-json-schema-generator\tests\JSONSchema\Tests\SchemaGenerator\ParseTest.php" tests="1" assertions="3" failures="1" errors="0" time="0.187500">
+      <testcase name="testParseIsWellCall" class="JSONSchema\Tests\SchemaGenerator\ParseTest" file="C:\Documents and Settings\Stagiaire\git\php-json-schema-generator\tests\JSONSchema\Tests\SchemaGenerator\ParseTest.php" line="8" assertions="3" time="0.187500">
+        <failure type="PHPUnit_Framework_ExpectationFailedException">JSONSchema\Tests\SchemaGenerator\ParseTest::testParseIsWellCall
+Expectation failed for method name is equal to &lt;string:parse&gt; when invoked 1 time(s).
+Method was expected to be called 1 times, actually called 0 times.
+
+</failure>
+      </testcase>
     </testsuite>
   </testsuite>
 </testsuites>

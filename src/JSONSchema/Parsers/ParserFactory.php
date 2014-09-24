@@ -5,98 +5,42 @@ use JSONSchema\Parsers\Exceptions\NoParserFoundException;
 
 /**
  * Helps in loading up the proper parser for the data type provided
- *  
- * 
+ *
+ *
  * @name ParserFactory
  * @author solvire
  * @package JSONSchema\Parsers
  * @subpackage Parsers
- * 
+ *
  */
-class ParserFactory 
+class ParserFactory
 {
-    
     /**
-     * List of the types of known parsers. 
-     * This should probably be moved to a config and mapping type setup
-     * @staticvar
-     * @var array $parserTypes
+     * @var array
      */
-    protected static $parserTypes = array(
-        'ArrayObject',
-        'Array',
-        'JSONString',
-        'Object',
-        'DoctrineEntity'
-        );
-    
+    private $parserCollection = array();
+
     /**
-     * static class 
+     * @param array $parserCollection
      */
-    protected function __construct(){}
-    
-    /**
-     * take the subject and load the appropriate parser with it 
-     * 
-     * @param mixed $subject
-     * @return JSONSchema\Parsers\Parser
-     */
-    public static function load($subject)
+    public function __construct(array $parserCollection)
     {
-        $prefix = self::getSubjectType($subject);
-        return self::loadByPrefix($prefix, $subject);
+        $this->parserCollection = $parserCollection;
     }
-    
+
     /**
-     * takes a parser name prefix and gets the parser
-     * ex JSONString return JSONStringParser
-     * 
-     * @param string $prefix
-     * @param mixed $subject
-     * @throws \RuntimeException
-     * @return JSONSchema\Parsers\Parser
-     */
-    public static function loadByPrefix($prefix, $subject = null)
-    {
-        $classname = 'JSONSchema\Parsers\\' . $prefix . 'Parser';
-        
-        if(class_exists($classname))
-            return new $classname($subject);
-        else 
-            throw new Exceptions\NoParserFoundException("Class not found: $classname ");
-    }
-    
-    /**
-     * determins the subject based on the class name or data type
-     * class naming convention is for the parsers is for the object type + Parser 
-     * Ex: ArrayObject will be parsed by ArrayObjectParser  
-     * 
-     * @param mixed $subject
-     * @return string subject type 
+     * @param mixed $data
      * @throws \InvalidArgumentException
-     * @throws NoParserFoundException
+     * @return \JSONSchema\Parsers\Parser
      */
-    public static function getSubjectType($subject = null )
+    public function getParser($data)
     {
-        
-        if(empty($subject) || is_null($subject))
-            throw new \InvalidArgumentException("The subject type could not be determined from your provided argument: [$subject] ", 422);
-        
-        if(is_array($subject) === true) return 'Array';
-        if(is_string($subject) === true) return 'JSONString';
-        if($subject instanceof \ArrayObject) return 'ArrayObject';
-        if(is_object($subject)) return 'ObjectParser';
-        
-        throw new NoParserFoundException();
-        
+        foreach ($this->parserCollection as $parser) {
+            if ($parser->isValidType($data) === true) {
+                return $parser;
+            }
+        }
+
+        throw new \InvalidArgumentException(sprintf('The type "%s" is not supported ', gettype($data)));
     }
-    
-    /**
-     * @return array $parserTypes 
-     */
-    public static function getParserTypes()
-    {
-        return self::$parserTypes;
-    }
-    
 }

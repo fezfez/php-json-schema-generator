@@ -2,67 +2,67 @@
 namespace JSONSchema\Structure;
 
 /**
- * A JSON document 
+ * A JSON document
  * Represents the body of the schema
  * Can be decomposed and consolidated as a simple array of key values for easy json_encoding
- * 
+ *
  * @link http://tools.ietf.org/html/draft-zyp-json-schema-04#section-3.2
  * @author steven
  *
  */
 use JSONSchema\Mappers\PropertyTypeMapper;
 
-class Schema 
+class Schema
 {
-    
+
     /**
      * From section 3.2
-     * Object members are keywords 
-     * 
+     * Object members are keywords
+     *
      * @var array
      */
     protected $keywords = array();
-    
+
     /**
      * Properties
-     * 
+     *
      * @var array $properties
      */
     protected $properties = array();
-    
+
     /**
      * Special use case
-     * JSON Array 
-     * 
+     * JSON Array
+     *
      * @var array $items
      */
     protected $items = array();
-    
+
     /**
      * @var string
      */
     protected $dollarSchema  = 'http://json-schema.org/draft-04/schema';
-    
+
     /**
      * the ID is a string reference to the resource that is identified in this document
      * As this JSON document is defined the base URL should be provided and set otherwise
      * the json schema
-     * 
+     *
      * @var string $id
      */
     protected $id = 'http://jsonschema.net';
-    
+
     /**
-     * properties or items in a list which are required 
+     * properties or items in a list which are required
      * @var array $required
      */
     protected $required = array();
-    
+
     /**
      * @var string $title
      */
     protected $title  = '';
-    
+
     /**
      * @var string $description
      */
@@ -70,31 +70,31 @@ class Schema
 
     /**
      * the JSON primitive type
-     * Default MUST be object type  
-     * Section 3.2 
-     * 
+     * Default MUST be object type
+     * Section 3.2
+     *
      * @var string $type
      */
     protected $type = 'object';
-    
+
     /**
-     * type of media content 
+     * type of media content
      * @var string
      */
     protected $mediaType = 'application/schema+json';
-    
+
     /**
-     * during the return it can clean up empty fields 
-     * @var boolean 
+     * during the return it can clean up empty fields
+     * @var boolean
      */
     protected $pruneEmptyFields = true;
 
-    
+
     public function __construct()
     {
-        
+
     }
-    
+
     /**
      * @param string $key
      * @param string $value
@@ -106,11 +106,11 @@ class Schema
     {
         if(!empty($this->keywords[$key]) && !$overwrite)
             throw new Exceptions\OverwriteKeyException();
-        
+
         $this->keywords[$key] = $value;
         return $this;
     }
-    
+
     /**
      * @param string $key
      * @param Property $value
@@ -122,12 +122,12 @@ class Schema
     {
         if(!empty($this->properties[$key]) && !$overwrite)
             throw new Exceptions\OverwriteKeyException();
-        
+
         $value->setId($this->getId() . '/' . $key);
         $this->properties[$key] = $value;
         return $this;
     }
-    
+
     /**
      * @param string $key
      * @param string $value
@@ -139,11 +139,11 @@ class Schema
     {
         if(!empty($this->items[$key]) && !$overwrite)
             throw new Exceptions\OverwriteKeyException();
-        
+
         $this->items[$key] = $value;
         return $this;
     }
-    
+
     /**
      * @param string $key
      * @return $this
@@ -158,26 +158,26 @@ class Schema
      * @param string $key
      * @return $this
      */
-    
+
     public function removeProperty($key)
     {
         unset($this->properties[$key]);
         return $this;
     }
-    
+
     /**
      * @param string $key
      * @return $this
      */
-    
+
     public function removeItem($key)
     {
         unset($this->items[$key]);
         return $this;
     }
-    
+
     /**
-     * @return array 
+     * @return array
      */
     public function getKeywords()
     {
@@ -199,8 +199,8 @@ class Schema
     {
         return $this->items;
     }
-    
-    
+
+
     /**
      * @return the $dollarSchema
      */
@@ -208,7 +208,7 @@ class Schema
     {
         return $this->dollarSchema;
     }
-    
+
     /**
      * @return $id
      */
@@ -265,10 +265,10 @@ class Schema
         $this->dollarSchema = $dollarSchema;
         return $this;
     }
-    
+
     /**
-     * 
-     * 
+     *
+     *
      * @param string $id
      */
     public function setId($id)
@@ -321,33 +321,33 @@ class Schema
         $this->mediaType = $mediaType;
         return $this;
     }
-    
+
     /**
-     * A string representation of this Schema 
+     * A string representation of this Schema
      * @return string
      */
     public function toString()
     {
         return json_encode($this->loadFields());
     }
-    
+
     /**
-     * simply convert to an array 
-     * @return array 
+     * simply convert to an array
+     * @return array
      */
     public function toArray()
     {
         return $this->loadFields();
     }
-    
+
     /**
-     * Main schema generation utility 
-     * 
-     * @return array list of fields and values including the properties/items 
+     * Main schema generation utility
+     *
+     * @return array list of fields and values including the properties/items
      */
     public function loadFields()
     {
-        // schema  holder 
+        // schema  holder
         $sa = new \stdClass();
         $sa->id = $this->id;
         $sa->schema = $this->dollarSchema;
@@ -356,26 +356,26 @@ class Schema
         $sa->description = $this->description;
         $sa->type = $this->type;
         $sa->mediaType = $this->mediaType; // not really part of the schema but i'm tacking it here for safe handling
-        
-        // add the items 
+
+        // add the items
         $items = $this->getItems();
         foreach($items as $key => $item)
             $sa->items[$key] = $item->loadFields($this->id);
-        
-        // add the propertiestas  
+
+        // add the propertiestas
         $properties = $this->getProperties();
-        // it's an object so instantiate one 
+        // it's an object so instantiate one
         if($properties)
             $sa->properties = new \stdClass();
 
         foreach($properties as $key => $property)
             $sa->properties->$key = $property->loadFields();
 
-            
+
         if($sa->type == PropertyTypeMapper::ARRAY_TYPE)
             return (array) $sa;
-        else 
+        else
             return $sa;
-        
+
     }
 }

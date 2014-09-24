@@ -5,89 +5,89 @@ use JSONSchema\Mappers\PropertyTypeMapper;
 
 /**
  * Represents a Property or Member as defined
- *  
+ *
  * @link http://tools.ietf.org/html/draft-zyp-json-schema-04#section-3.1
  * @link http://tools.ietf.org/html/rfc4627
  * @author steven
  *
  */
-class Property 
+class Property
 {
-    
+
     /**
-     * link to the resource identifier 
-     * 
+     * link to the resource identifier
+     *
      * @var string $id
      */
     protected $id = '';
-    
+
     /**
      * @var string $type
      */
     protected $type = '';
-    
+
     /**
-     * property key - array like 
+     * property key - array like
      * @var string
      */
     protected $key = '';
-    
+
     /**
-     * 
+     *
      * @var string
      */
     protected $name = '';
 
     /**
-     * 
+     *
      * @var string
      */
     protected $title = '';
 
     /**
-     * 
+     *
      * @var string
      */
     protected $description = '';
-    
+
     /**
      * needs to be allowed to be set as a default config setting
-     * 
+     *
      * @var boolean
      */
     protected $required = false;
-    
+
     /**
      * When numeric it's integer min or max
-     * When it's array it's min/max items 
-     * 
+     * When it's array it's min/max items
+     *
      * @var integer
      */
     protected $min = 0;
-    
+
     /**
      * When numeric it's integer min or max
-     * When it's array it's min/max items 
-     * 
+     * When it's array it's min/max items
+     *
      * @var integer
      */
     protected $max = 0;
-    
+
     /**
-     * sub properties 
-     * 
-     * @var array 
+     * sub properties
+     *
+     * @var array
      */
     protected $properties = array();
 
-    
+
     /**
-     * sub items 
-     * 
-     * @var array 
+     * sub items
+     *
+     * @var array
      */
     protected $items = array();
-    
+
 	/**
      * @return the $id
      */
@@ -175,7 +175,7 @@ class Property
     {
         return $this->items;
     }
-    
+
 	/**
      * @param string $id
      */
@@ -256,7 +256,7 @@ class Property
         $this->max = $max;
         return $this;
     }
-    
+
     /**
      * @param string $key
      * @param Property $value
@@ -272,8 +272,8 @@ class Property
         $this->properties[$key] = $value;
         return $this;
     }
-    
-    
+
+
     /**
      * @param string $key
      * @param Item $value
@@ -285,18 +285,18 @@ class Property
     {
         if(!empty($this->items[$key]) && !$overwrite)
             throw new Exceptions\OverwriteKeyException();
-        
+
         $this->items[$key] = $value;
         return $this;
     }
-    
+
     /**
-     * @param string $parentId - identifier for the parent element 
-     * @return array fields 
+     * @param string $parentId - identifier for the parent element
+     * @return array fields
      */
     public function loadFields($parentId = null)
     {
-        // field object - to force the object type in json encode 
+        // field object - to force the object type in json encode
         $fa = new \stdClass();
         $fa->id = $this->id ? $this->getId() : $parentId . '/' . $this->name;
         $fa->type = $this->getType();
@@ -306,25 +306,25 @@ class Property
         if(isset($this->description)) $fa->description = $this->getDescription();
         $fa->required = $this->required;
 
-        if($fa->type == PropertyTypeMapper::INTEGER_TYPE || 
+        if($fa->type == PropertyTypeMapper::INTEGER_TYPE ||
             $fa->type == PropertyTypeMapper::NUMBER_TYPE )
         {
             if(!empty($this->min)) $fa->min = $this->getMin();
             if(!empty($this->max)) $fa->max = $this->getMax();
         }
-        
-        
+
+
         $properties = $this->getProperties();
         if($properties)$fa->properties = new \stdClass();
         foreach($properties as $key => $property)
             $fa->properties->$key = $property->loadFields($this->getId());
-        
-        // add the items 
+
+        // add the items
         $items = $this->getItems();
         foreach($items as $key => $item)
             $fa->items[] = $item->loadFields($this->getId());
-        
+
         return $fa;
     }
-    
+
 }
