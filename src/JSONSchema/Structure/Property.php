@@ -299,35 +299,34 @@ class Property
      */
     public function loadFields($parentId = null)
     {
-        // field object - to force the object type in json encode
-        $fa = new \stdClass();
-        $fa->id = $this->id ? $this->getId() : $parentId . '/' . $this->name;
-        $fa->type = $this->getType();
-        if(isset($this->key)) $fa->key = $this->getKey();
-        $fa->name = $this->getName();
-        $fa->title = $this->getTitle();
-        if(isset($this->description)) $fa->description = $this->getDescription();
-        $fa->required = $this->required;
+        $array = array(
+            'id'          => $this->id ? $this->getId() : $parentId . '/' . $this->name,
+            'type'        => $this->type,
+            'required'    => $this->required,
+            'title'       => $this->title,
+            'description' => $this->description,
+            'type'        => $this->type,
+            'key'         => $this->key,
+            'items'       => array(),
+            'properties'  => array()
+        );
 
-        if($fa->type == PropertyTypeMapper::INTEGER_TYPE ||
-            $fa->type == PropertyTypeMapper::NUMBER_TYPE )
+        if($array['type'] === PropertyTypeMapper::INTEGER_TYPE ||
+           $array['type'] === PropertyTypeMapper::NUMBER_TYPE )
         {
-            if(!empty($this->min)) $fa->min = $this->getMin();
-            if(!empty($this->max)) $fa->max = $this->getMax();
+            if(empty($this->min) === false) $array['min'] = $this->getMin();
+            if(empty($this->max) === false) $array['max'] = $this->getMax();
         }
 
+        foreach($this->getItems() as $key => $item) {
+            $array['items'][] = $item->loadFields($this->id);
+        }
 
-        $properties = $this->getProperties();
-        if($properties)$fa->properties = new \stdClass();
-        foreach($properties as $key => $property)
-            $fa->properties->$key = $property->loadFields($this->getId());
+        foreach($this->getProperties() as $key => $property) {
+            $array['properties'][$key] = $property->loadFields($this->id);
+        }
 
-        // add the items
-        $items = $this->getItems();
-        foreach($items as $key => $item)
-            $fa->items[] = $item->loadFields($this->getId());
-
-        return $fa;
+        return $array;
     }
 
 }

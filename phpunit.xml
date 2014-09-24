@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="./tests/bootstrap.php"
-         colors="true"
+         backupGlobals="false"
          processIsolation="false"
-         stopOnFailure="false"
-         syntaxCheck="false"
+         colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
+         strict="true"
          testSuiteLoaderClass="PHPUnit_Runner_StandardTestSuiteLoader">
 
     <testsuites>

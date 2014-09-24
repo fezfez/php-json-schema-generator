@@ -118,7 +118,7 @@ class Schema
      * @return $this
      * @throws Exceptions\OverwriteKeyException
      */
-    public function addProperty($key,Property $value,$overwrite = true)
+    public function addProperty($key, Property $value, $overwrite = true)
     {
         if(!empty($this->properties[$key]) && !$overwrite)
             throw new Exceptions\OverwriteKeyException();
@@ -135,7 +135,7 @@ class Schema
      * @return $this
      * @throws Exceptions\OverwriteKeyException
      */
-    public function addItem($key,$value,$overwrite = true)
+    public function addItem($key, Item $value, $overwrite = true)
     {
         if(!empty($this->items[$key]) && !$overwrite)
             throw new Exceptions\OverwriteKeyException();
@@ -328,16 +328,7 @@ class Schema
      */
     public function toString()
     {
-        return json_encode($this->loadFields());
-    }
-
-    /**
-     * simply convert to an array
-     * @return array
-     */
-    public function toArray()
-    {
-        return $this->loadFields();
+        return json_encode($this->toArray(), JSON_PRETTY_PRINT);
     }
 
     /**
@@ -345,37 +336,28 @@ class Schema
      *
      * @return array list of fields and values including the properties/items
      */
-    public function loadFields()
+    public function toArray()
     {
-        // schema  holder
-        $sa = new \stdClass();
-        $sa->id = $this->id;
-        $sa->schema = $this->dollarSchema;
-        $sa->required = $this->required;
-        $sa->title = $this->title;
-        $sa->description = $this->description;
-        $sa->type = $this->type;
-        $sa->mediaType = $this->mediaType; // not really part of the schema but i'm tacking it here for safe handling
+        $array = array(
+            'id'          => $this->id,
+            'schema'      => $this->schema,
+            'required'    => $this->required,
+            'title'       => $this->title,
+            'description' => $this->description,
+            'type'        => $this->type,
+            'mediaType'   => $this->mediaType,
+            'items'       => array(),
+            'properties'  => array()
+        );
 
-        // add the items
-        $items = $this->getItems();
-        foreach($items as $key => $item)
-            $sa->items[$key] = $item->loadFields($this->id);
+        foreach($this->getItems() as $key => $item) {
+            $array['items'][] = $item->loadFields($this->id);
+        }
 
-        // add the propertiestas
-        $properties = $this->getProperties();
-        // it's an object so instantiate one
-        if($properties)
-            $sa->properties = new \stdClass();
+        foreach($this->getProperties() as $key => $property) {
+            $array['properties'][$key] = $property->loadFields();
+        }
 
-        foreach($properties as $key => $property)
-            $sa->properties->$key = $property->loadFields();
-
-
-        if($sa->type == PropertyTypeMapper::ARRAY_TYPE)
-            return (array) $sa;
-        else
-            return $sa;
-
+        return $array;
     }
 }
