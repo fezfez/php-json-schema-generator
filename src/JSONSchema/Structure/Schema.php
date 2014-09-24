@@ -89,12 +89,6 @@ class Schema
      */
     protected $pruneEmptyFields = true;
 
-
-    public function __construct()
-    {
-
-    }
-
     /**
      * @param string $key
      * @param string $value
