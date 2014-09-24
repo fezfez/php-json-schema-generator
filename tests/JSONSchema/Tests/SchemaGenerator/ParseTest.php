@@ -2,6 +2,7 @@
 namespace JSONSchema\Tests\SchemaGenerator;
 
 use JSONSchema\SchemaGenerator;
+use JSONSchema\Structure\Schema;
 
 class ParseTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,7 +16,7 @@ class ParseTest extends \PHPUnit_Framework_TestCase
 
         $parserMock->expects($this->once())
         ->method('parse')
-        ->willReturn($parserMock);
+        ->willReturn(new Schema());
 
         $parserFactory->expects($this->once())
         ->method('getParser')
@@ -23,6 +24,6 @@ class ParseTest extends \PHPUnit_Framework_TestCase
 
         $sUT = new SchemaGenerator($parserFactory);
 
-        $this->assertEquals($parserMock, $sUT->parse('my data !'));
+        $this->assertInstanceOf('JSONSchema\Structure\Schema', $sUT->parse('my data !'));
     }
 }

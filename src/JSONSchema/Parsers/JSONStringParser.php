@@ -1,18 +1,14 @@
 <?php
 namespace JSONSchema\Parsers;
 
+use JSONSchema\Structure\Property;
 use JSONSchema\Structure\Item;
-
 use JSONSchema\Parsers\Exceptions\InvalidParameterException;
 use JSONSchema\Mappers\StringMapper;
 use JSONSchema\Mappers\PropertyTypeMapper;
-use JSONSchema\Structure\Property;
 
 /**
- *
- *
  * @author steven
- *
  */
 class JSONStringParser extends Parser
 {
@@ -29,12 +25,11 @@ class JSONStringParser extends Parser
         return is_string($data);
     }
 
-
     /**
      * (non-PHPdoc)
      * @see JSONSchema\Parsers.Parser::parse()
      */
-    protected function doParse($subject = null)
+    protected function doParse($subject)
     {
         if(!$jsonObj = json_decode($subject)) {
             throw new Exceptions\UnprocessableSubjectException(
@@ -43,7 +38,6 @@ class JSONStringParser extends Parser
         }
 
         $this->loadObjectProperties($jsonObj);
-        $this->loadSchema();
 
         return $this;
     }
@@ -54,14 +48,13 @@ class JSONStringParser extends Parser
      *
      * @param array $jsonObj
      */
-    protected function loadObjectProperties($jsonObj)
+    private function loadObjectProperties($jsonObj)
     {
         // start walking the object
         foreach($jsonObj as $key => $property) {
-            $this->appendProperty($key, $this->determineProperty($property,$key));
+            $this->schemaObject->addProperty($key, $this->determineProperty($property,$key));
         }
     }
-
 
     /**
      * due to the fact that determining property will be so different between
@@ -75,7 +68,7 @@ class JSONStringParser extends Parser
      * @param object $property
      * @return Property
      */
-    protected function determineProperty($property,$name)
+    private function determineProperty($property,$name)
     {
         $baseUrl         = $this->configKeyExists('baseUrl') ? $this->getConfigSetting('baseUrl') : null ;
         $requiredDefault = $this->configKeyExists('requiredDefault') ? $this->getConfigSetting('requiredDefault') : false;
@@ -107,7 +100,6 @@ class JSONStringParser extends Parser
         return $prop;
     }
 
-
     /**
      * Similar to determineProperty but with a variation
      * Notice that in items list there can be a collection of items - no keys here
@@ -119,7 +111,7 @@ class JSONStringParser extends Parser
      * @param string $name
      * @return Property
      */
-    protected function determineItem($items, $name)
+    private function determineItem($items, $name)
     {
         $baseUrl         = $this->configKeyExists('baseUrl') ? $this->getConfigSetting('baseUrl') : null ;
         $requiredDefault = $this->configKeyExists('requiredDefault') ? $this->getConfigSetting('requiredDefault') : false;
@@ -152,7 +144,7 @@ class JSONStringParser extends Parser
             }
 
         } elseif ($type === StringMapper::OBJECT_TYPE) {
-            $retItem->addItem($key, $this->determineProperty($items, $key));
+            //$retItem->addItem($key, $this->determineProperty($items, $key));
         }
 
         return $retItem;
@@ -162,7 +154,7 @@ class JSONStringParser extends Parser
      * @param string $name
      * @param mixed $item
      */
-    protected function stackItemFields($name, $item)
+    private function stackItemFields($name, $item)
     {
         // for non-loopables
         if (is_array($item) === false && is_object($item) === false) {

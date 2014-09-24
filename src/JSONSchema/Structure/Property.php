@@ -264,10 +264,11 @@ class Property
      * @return $this
      * @throws Exceptions\OverwriteKeyException
      */
-    public function addProperty($key,Property $value,$overwrite = true)
+    public function addProperty($key, Property $value, $overwrite = true)
     {
-        if(!empty($this->properties[$key]) && !$overwrite)
+        if (array_key_exists($key, $this->properties) && $overwrite === false) {
             throw new Exceptions\OverwriteKeyException();
+        }
 
         $this->properties[$key] = $value;
         return $this;
@@ -281,12 +282,14 @@ class Property
      * @return $this
      * @throws Exceptions\OverwriteKeyException
      */
-    public function addItem($key,Item $value,$overwrite = true)
+    public function addItem($key, Item $value, $overwrite = true)
     {
-        if(!empty($this->items[$key]) && !$overwrite)
+        if (array_key_exists($key, $this->items) && $overwrite === false) {
             throw new Exceptions\OverwriteKeyException();
+        }
 
         $this->items[$key] = $value;
+
         return $this;
     }
 

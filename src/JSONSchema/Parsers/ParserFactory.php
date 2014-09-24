@@ -37,10 +37,10 @@ class ParserFactory
     {
         foreach ($this->parserCollection as $parser) {
             if ($parser->isValidType($data) === true) {
-                return $parser;
+                return clone $parser;
             }
         }
 
-        throw new \InvalidArgumentException(sprintf('The type "%s" is not supported ', gettype($data)));
+        throw new NoParserFoundException(sprintf('The type "%s" is not supported ', gettype($data)));
     }
 }

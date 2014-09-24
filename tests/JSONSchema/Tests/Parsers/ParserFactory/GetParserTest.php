@@ -17,7 +17,7 @@ class GetParserTest extends \PHPUnit_Framework_TestCase
 
         $sUT = new ParserFactory(array($parserMock));
 
-        $this->setExpectedException('InvalidArgumentException');
+        $this->setExpectedException('JSONSchema\Parsers\Exceptions\NoParserFoundException');
 
         $sUT->getParser($data);
     }

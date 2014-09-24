@@ -35,6 +35,7 @@ class SchemaGenerator
 
     /**
      * @param string $data
+     * @return \JSONSchema\Structure\Schema
      */
     public function parse($data)
     {
