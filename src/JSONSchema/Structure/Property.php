@@ -309,9 +309,9 @@ class Property
         $stdClass->title       = $this->title;
         $stdClass->description = $this->description;
 
-        if($stdClass->type === PropertyTypeMapper::INTEGER_TYPE ||
-           $stdClass->type === PropertyTypeMapper::NUMBER_TYPE )
-        {
+        $numericType = array(PropertyTypeMapper::INTEGER_TYPE, PropertyTypeMapper::NUMBER_TYPE);
+
+        if (in_array($stdClass->type, $numericType) === true) {
             if(empty($this->min) === false) $stdClass->min = $this->getMin();
             if(empty($this->max) === false) $stdClass->max = $this->getMax();
         }

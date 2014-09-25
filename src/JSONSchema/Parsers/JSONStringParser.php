@@ -76,14 +76,16 @@ class JSONStringParser extends Parser
      */
     private function determineChildProperty($type, $property, Property $prop)
     {
-        // since this is an object get the properties of the sub objects
-        if ($type === PropertyTypeMapper::ARRAY_TYPE){
-            foreach ($property as $data) {
-                $prop->addItem('0', $this->determineItem($data, '0'));
-            }
-        } elseif ($type === PropertyTypeMapper::OBJECT_TYPE) {
+        $types = array(
+            PropertyTypeMapper::ARRAY_TYPE  => 'Item',
+            PropertyTypeMapper::OBJECT_TYPE => 'Property'
+        );
+
+        if (false === $method = array_keys($types, $type)) {
             foreach ($property as $key => $newProperty) {
-                $prop->addProperty($key, $this->determineProperty($newProperty, $key));
+                $addMethod = 'add' . $method;
+                $dertermineMethod = 'determine' . $method;
+                $prop->$addMethod($key, $this->$dertermineMethod($newProperty, $key));
             }
         }
 
