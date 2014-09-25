@@ -77,14 +77,15 @@ class JSONStringParser extends Parser
     private function determineChildProperty($type, $property, Property $prop)
     {
         $types = array(
-            PropertyTypeMapper::ARRAY_TYPE  => 'Item',
-            PropertyTypeMapper::OBJECT_TYPE => 'Property'
+            'Item'     => PropertyTypeMapper::ARRAY_TYPE,
+            'Property' => PropertyTypeMapper::OBJECT_TYPE
         );
 
-        if (false === $method = array_keys($types, $type)) {
+        if (false !== $method = array_search($type, $types)) {
             foreach ($property as $key => $newProperty) {
-                $addMethod = 'add' . $method;
+                $addMethod        = 'add' . $method;
                 $dertermineMethod = 'determine' . $method;
+
                 $prop->$addMethod($key, $this->$dertermineMethod($newProperty, $key));
             }
         }
