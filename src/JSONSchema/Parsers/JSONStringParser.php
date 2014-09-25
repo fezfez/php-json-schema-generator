@@ -4,7 +4,6 @@ namespace JSONSchema\Parsers;
 use JSONSchema\Structure\Property;
 use JSONSchema\Structure\Item;
 use JSONSchema\Structure\Schema;
-use JSONSchema\Parsers\Exceptions\InvalidParameterException;
 use JSONSchema\Mappers\PropertyTypeMapper;
 
 /**

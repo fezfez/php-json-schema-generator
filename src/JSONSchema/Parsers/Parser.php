@@ -4,8 +4,6 @@ namespace JSONSchema\Parsers;
 use JSONSchema\Structure\Property;
 use JSONSchema\Structure\Schema;
 use JSONSchema\Structure\Item;
-use JSONSchema\Parsers\Exceptions\NoStructureFoundException;
-use JSONSchema\Parsers\Exceptions\InvalidConfigItemException;
 
 /**
  * Main parser base class
