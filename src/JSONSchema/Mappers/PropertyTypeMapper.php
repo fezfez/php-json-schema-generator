@@ -1,8 +1,6 @@
 <?php
 namespace JSONSchema\Mappers;
 
-use JSONSchema\Mappers\Exceptions\UnmappableException;
-
 /**
  *
  * @package JSONSchema\Mappers

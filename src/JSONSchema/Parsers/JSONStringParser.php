@@ -5,7 +5,6 @@ use JSONSchema\Structure\Property;
 use JSONSchema\Structure\Item;
 use JSONSchema\Structure\Schema;
 use JSONSchema\Parsers\Exceptions\InvalidParameterException;
-use JSONSchema\Mappers\StringMapper;
 use JSONSchema\Mappers\PropertyTypeMapper;
 
 /**
@@ -55,7 +54,7 @@ class JSONStringParser extends Parser
     {
         $baseUrl         = $this->getConfig('baseUrl');
         $requiredDefault = $this->getConfig('requiredDefault');
-        $type            = StringMapper::map($property);
+        $type            = PropertyTypeMapper::map($property);
 
         $prop = new Property();
         $prop->setType($type)
@@ -79,11 +78,11 @@ class JSONStringParser extends Parser
     private function determineChildProperty($type, $property, Property $prop)
     {
         // since this is an object get the properties of the sub objects
-        if ($type === StringMapper::ARRAY_TYPE){
+        if ($type === PropertyTypeMapper::ARRAY_TYPE){
             foreach ($property as $data) {
                 $prop->addItem(0, $this->determineItem($data, 0));
             }
-        } elseif ($type === StringMapper::OBJECT_TYPE) {
+        } elseif ($type === PropertyTypeMapper::OBJECT_TYPE) {
             foreach ($property as $key => $newProperty) {
                 $prop->addProperty($key, $this->determineProperty($newProperty, $key));
             }
@@ -101,7 +100,7 @@ class JSONStringParser extends Parser
     {
         $baseUrl         = $this->getConfig('baseUrl');
         $requiredDefault = $this->getConfig('requiredDefault');
-        $type            = StringMapper::map($items);
+        $type            = PropertyTypeMapper::map($items);
 
         $retItem = new Item();
         $retItem->setType($type);
@@ -121,7 +120,7 @@ class JSONStringParser extends Parser
      */
     private function determineChildItem($property, Item $item)
     {
-        if (StringMapper::map($property) === StringMapper::OBJECT_TYPE) {
+        if (PropertyTypeMapper::map($property) === PropertyTypeMapper::OBJECT_TYPE) {
             foreach (get_object_vars($property) as $key => $itemzz) {
                 $item->addProperty($key, $this->determineProperty($itemzz, $key));
             }

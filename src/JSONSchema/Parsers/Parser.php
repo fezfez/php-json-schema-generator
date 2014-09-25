@@ -42,7 +42,6 @@ abstract class Parser
 
         $configsKeys = array(
             'schema_dollarSchema' => 'setDollarSchema',
-            'schema_required'     => 'setRequired',
             'schema_title'        => 'setTitle',
             'schema_description'  => 'setDescription',
             'schema_type'         => 'setType'
