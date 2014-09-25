@@ -9,11 +9,9 @@ class OverwriteKeyException extends \RuntimeException
 {
     /**
      * @param string $message
-     * @param string $code
-     * @param string $previous
      */
-    public function __construct($message = "You are attempting to overwrite a key without forcing it to be. ", $code = null, $previous = null)
+    public function __construct($message = "You are attempting to overwrite a key without forcing it to be. ")
     {
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message);
     }
 }

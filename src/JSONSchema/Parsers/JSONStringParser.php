@@ -30,7 +30,7 @@ class JSONStringParser extends Parser
      */
     protected function doParse($subject, Schema $schema)
     {
-        if(!$jsonObj = json_decode($subject)) {
+        if(null === $jsonObj = json_decode($subject)) {
             throw new Exceptions\UnprocessableSubjectException(
                 "The JSONString subject was not processable - decode failed "
             );
