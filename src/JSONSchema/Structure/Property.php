@@ -88,12 +88,14 @@ class Property
      */
     protected $items = array();
 
+
     /**
+     * @param string $parentId
      * @return string
      */
-    public function getId()
+    public function getId($parentId = null)
     {
-        return $this->id;
+        return $this->id !== null ? $this->id : $parentId . '/' . $this->name;
     }
 
     /**
@@ -301,7 +303,7 @@ class Property
     {
         $stdClass = new \stdClass();
 
-        $stdClass->id          = $this->id !== null ? $this->getId() : $parentId . '/' . $this->name;
+        $stdClass->id          = $this->getId($parentId);
         $stdClass->type        = $this->type;
         $stdClass->required    = $this->required;
         $stdClass->title       = $this->title;

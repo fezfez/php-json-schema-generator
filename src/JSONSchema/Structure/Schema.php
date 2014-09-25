@@ -354,22 +354,28 @@ class Schema
             'mediaType'   => $this->mediaType
         );
 
-        if (count($this->items) !== 0) {
-            $array['items'] = array();
-            foreach($this->items as $key => $item) {
-                $array['items'][] = $item->toObject($this->id);
-            }
-        }
-
-        if (count($this->properties) !== 0) {
-            $array['properties']  = array();
-            foreach($this->properties as $key => $property) {
-                $array['properties'][$key] = $property->toObject();
-            }
-        }
+        $array = $this->hydrateCollection($array, 'items');
+        $array = $this->hydrateCollection($array, 'properties');
 
         $array['required'] = $this->required;
 
         return (object) $array;
+    }
+
+    /**
+     * @param \stdClass $stdClass
+     * @param string $name
+     * @return stdClass
+     */
+    private function hydrateCollection(array $array, $name)
+    {
+        if (count($this->$name) !== 0) {
+            $array[$name] = array();
+            foreach($this->$name as $property) {
+                array_push($array[$name], $property->toObject($this->id));
+            }
+        }
+
+        return $array;
     }
 }
