@@ -21,11 +21,7 @@ class PropertyTypeMapper
     const STRING_TYPE  = 'string';
 
     /**
-     * the goal here would be go into a logic tree and work
-     * from loosest definition to most strict
-     *
      * @param mixed $property
-     * @throws Exceptions\Unmappable
      * @return string
      */
     public static function map($property)

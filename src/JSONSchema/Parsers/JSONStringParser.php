@@ -63,17 +63,28 @@ class JSONStringParser extends Parser
              ->setKey($name) // due to the limited content ability of the basic json string
              ->setRequired($requiredDefault);
 
-        if($baseUrl === null) {
+        if ($baseUrl !== null) {
             $prop->setId($baseUrl . '/' . $name);
         }
 
+        return $this->determineChildProperty($type, $property, $prop);
+    }
+
+    /**
+     * @param string $type
+     * @param mixed $property
+     * @param Property $prop
+     * @return Ambiguous
+     */
+    private function determineChildProperty($type, $property, Property $prop)
+    {
         // since this is an object get the properties of the sub objects
-        if($type === StringMapper::ARRAY_TYPE){
+        if ($type === StringMapper::ARRAY_TYPE){
             foreach ($property as $data) {
                 $prop->addItem(0, $this->determineItem($data, 0));
             }
-        } elseif($type == StringMapper::OBJECT_TYPE) {
-            foreach($property as $key => $newProperty) {
+        } elseif ($type === StringMapper::OBJECT_TYPE) {
+            foreach ($property as $key => $newProperty) {
                 $prop->addProperty($key, $this->determineProperty($newProperty, $key));
             }
         }
@@ -95,17 +106,27 @@ class JSONStringParser extends Parser
         $retItem = new Item();
         $retItem->setType($type);
 
-        if($baseUrl === null) {
+        if ($baseUrl !== null) {
             $retItem->setId($baseUrl . '/' . $name);
         }
 
+        return $this->determineChildItem($items, $retItem);
+    }
 
-        if (StringMapper::map($items) === StringMapper::OBJECT_TYPE) {
-            foreach (get_object_vars($items) as $key => $itemzz) {
-                $retItem->addProperty($key, $this->determineProperty($itemzz, $key));
+    /**
+     * @param string $type
+     * @param mixed $property
+     * @param Property $prop
+     * @return Ambiguous
+     */
+    private function determineChildItem($property, Item $item)
+    {
+        if (StringMapper::map($property) === StringMapper::OBJECT_TYPE) {
+            foreach (get_object_vars($property) as $key => $itemzz) {
+                $item->addProperty($key, $this->determineProperty($itemzz, $key));
             }
         }
 
-        return $retItem;
+        return $item;
     }
 }
