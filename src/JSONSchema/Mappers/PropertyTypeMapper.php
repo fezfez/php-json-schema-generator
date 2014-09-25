@@ -30,22 +30,6 @@ class PropertyTypeMapper
      */
     public static function map($property)
     {
-        if (is_int($property) === false && $property === null) {
-            return self::NULL_TYPE;
-        } elseif (is_float($property) === true) {
-            return self::NUMBER_TYPE;
-        } elseif (is_int($property) === true) {
-            return self::INTEGER_TYPE;
-        } elseif (is_bool($property) === true) {
-            return self::BOOLEAN_TYPE;
-        } elseif (is_array($property) === true) {
-            return self::ARRAY_TYPE;
-        } elseif (is_object($property) === true) {
-            return self::OBJECT_TYPE;
-        } elseif (is_string($property) === true) {
-            return self::STRING_TYPE;
-        }
-
-        throw new UnmappableException("The provided argument property");
+        return ($type = gettype($property)) === 'double' ? self::NUMBER_TYPE : strtolower($type);
     }
 }
