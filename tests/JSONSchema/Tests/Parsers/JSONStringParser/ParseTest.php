@@ -20,6 +20,56 @@ class ParseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('JSONSchema\Structure\Schema', $sUT->parse('{"test" : "toto"}'));
     }
 
+    public function testParsingWithConfig()
+    {
+        $sUT = new JSONStringParser();
+
+        $config = array(
+            'fake' => 'config'
+        );
+
+        $this->assertInstanceOf('JSONSchema\Structure\Schema', $sUT->parse('{"test" : "toto"}', $config));
+    }
+
+    public function testStringRepresentation()
+    {
+        $sUT = new JSONStringParser();
+
+        $config = array(
+            'fake' => 'config'
+        );
+
+        $json = '
+{
+    "test": "toto",
+    "antoher": [
+        {
+            "other": "test",
+            "in": {
+                "test": "hoho"
+            },
+            "aboolean" : true,
+            "integer" : 10,
+            "float" : 1.2,
+            "nullone" : null
+        }
+    ]
+}';
+
+        $this->assertInternalType('string', $sUT->parse($json, $config)->toString());
+    }
+
+    public function testArrayRepresentation()
+    {
+        $sUT = new JSONStringParser();
+
+        $config = array(
+            'fake' => 'config'
+        );
+
+        $this->assertInternalType('array', $sUT->parse('{"test" : "toto"}', $config)->toArray());
+    }
+
     public function testComplex()
     {
         $sUT = new JSONStringParser();

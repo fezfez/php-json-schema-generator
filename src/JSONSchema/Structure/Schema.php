@@ -334,7 +334,7 @@ class Schema
     {
         $array = array(
             'id'          => $this->id,
-            'schema'      => $this->schema,
+            'schema'      => $this->dollarSchema,
             'required'    => $this->required,
             'title'       => $this->title,
             'description' => $this->description,

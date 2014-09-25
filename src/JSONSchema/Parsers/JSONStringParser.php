@@ -3,6 +3,7 @@ namespace JSONSchema\Parsers;
 
 use JSONSchema\Structure\Property;
 use JSONSchema\Structure\Item;
+use JSONSchema\Structure\Schema;
 use JSONSchema\Parsers\Exceptions\InvalidParameterException;
 use JSONSchema\Mappers\StringMapper;
 use JSONSchema\Mappers\PropertyTypeMapper;
@@ -29,7 +30,7 @@ class JSONStringParser extends Parser
      * (non-PHPdoc)
      * @see JSONSchema\Parsers.Parser::parse()
      */
-    protected function doParse($subject)
+    protected function doParse($subject, Schema $schema)
     {
         if(!$jsonObj = json_decode($subject)) {
             throw new Exceptions\UnprocessableSubjectException(
@@ -37,23 +38,12 @@ class JSONStringParser extends Parser
             );
         }
 
-        $this->loadObjectProperties($jsonObj);
-
-        return $this;
-    }
-
-    /**
-     * top level
-     * every recurse under this will add to the properties of the property
-     *
-     * @param array $jsonObj
-     */
-    private function loadObjectProperties($jsonObj)
-    {
         // start walking the object
         foreach($jsonObj as $key => $property) {
-            $this->schemaObject->addProperty($key, $this->determineProperty($property,$key));
+            $schema->addProperty($key, $this->determineProperty($property,$key));
         }
+
+        return $schema;
     }
 
     /**
@@ -68,10 +58,10 @@ class JSONStringParser extends Parser
      * @param object $property
      * @return Property
      */
-    private function determineProperty($property,$name)
+    private function determineProperty($property, $name)
     {
-        $baseUrl         = $this->configExists('baseUrl') ? $this->getConfig('baseUrl') : null ;
-        $requiredDefault = $this->configExists('requiredDefault') ? $this->getConfig('requiredDefault') : false;
+        $baseUrl         = $this->getConfig('baseUrl');
+        $requiredDefault = $this->getConfig('requiredDefault');
         $type            = StringMapper::map($property);
 
         if($type === StringMapper::ARRAY_TYPE) {
@@ -113,8 +103,8 @@ class JSONStringParser extends Parser
      */
     private function determineItem($items, $name)
     {
-        $baseUrl         = $this->configExists('baseUrl') ? $this->getConfig('baseUrl') : null ;
-        $requiredDefault = $this->configExists('requiredDefault') ? $this->getConfig('requiredDefault') : false;
+        $baseUrl         = $this->getConfig('baseUrl');
+        $requiredDefault = $this->getConfig('requiredDefault');
         $type            = StringMapper::map($items);
 
         $retItem = new Item();

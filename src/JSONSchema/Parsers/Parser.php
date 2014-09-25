@@ -17,14 +17,6 @@ use JSONSchema\Parsers\Exceptions\InvalidConfigItemException;
 abstract class Parser
 {
     /**
-     * by default we should probably assume
-     * that this is going to deliver as a JSON object
-     *
-     * @var boolean $isJSONObject
-     */
-    protected $isJSONObject = true;
-
-    /**
      * place holder for the schema object
      * @var \JSONSchema\Structure\Schema $schemaObject
      */
@@ -44,37 +36,9 @@ abstract class Parser
      */
     public function parse($subject, array $config = array())
     {
-        if (isset($config['isJSONObject']) === true) {
-            $this->isJSONObject = $config['isJSONObject'];
-        }
-
         $this->config = $config;
-        $this->loadSchema();
-        $this->doParse($subject);
 
-        return $this->schemaObject;
-    }
-
-    /**
-     * @param string $subject
-     */
-    abstract protected function doParse($subject);
-    /**
-     * @param mixed $data
-     * @return boolean
-     */
-    abstract public function isValidType($data);
-
-    /**
-     * basically set up the schema object with the properties
-     * provided in the config
-     * most items are defaulted as they are probably domain specific
-     *
-     * @throws InvalidConfigItemException
-     */
-    protected function loadSchema()
-    {
-        $this->schemaObject = new Schema();
+        $schemaObject = new Schema();
 
         $configsKeys = array(
             'schema_dollarSchema' => 'setDollarSchema',
@@ -85,32 +49,33 @@ abstract class Parser
         );
 
         foreach ($configsKeys as $key => $method) {
-            if(isset($this->config[$key]) === true) {
-                $this->schemaObject->$method($this->config[$key]);
+            if(isset($config[$key]) === true) {
+                $schemaObject->$method($config[$key]);
             }
         }
 
-        return $this;
+        return $this->doParse($subject, $schemaObject);
     }
+
+    /**
+     * @param string $subject
+     */
+    abstract protected function doParse($subject, Schema $schema);
+    /**
+     * @param mixed $data
+     * @return boolean
+     */
+    abstract public function isValidType($data);
 
     /**
      * @param string $key
      */
     protected function getConfig($key)
     {
-        if (isset($this->config[$key]) === false || is_string($key) === false) {
-            throw new InvalidConfigItemException("They key: $key is not set ");
+        if (array_key_exists($key, $this->config) === false) {
+            return null;
         }
 
         return $this->config[$key];
-    }
-
-    /**
-     * @param string $key
-     * @return boolean
-     */
-    protected function configExists($key)
-    {
-        return isset($this->config[$key]);
     }
 }
