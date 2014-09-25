@@ -10,10 +10,10 @@ class AllPropsTest extends \PHPUnit_Framework_TestCase
     {
         $sUT = new Item();
 
-        $id = 'test';
-        $type = 'im';
+        $id                   = 'test';
+        $type                 = 'im';
         $additionalProperties = false;
-        $required = 'test';
+        $required             = 'test';
 
         $sUT->setId($id);
         $sUT->setType($type);

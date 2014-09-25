@@ -10,15 +10,15 @@ class AllPropsTest extends \PHPUnit_Framework_TestCase
     {
         $sUT = new Property();
 
-        $id = 'test';
-        $type = 'im';
-        $key = 'a';
-        $name = ',';
-        $title = 'super';
+        $id          = 'test';
+        $type        = 'im';
+        $key         = 'a';
+        $name        = ',';
+        $title       = 'super';
         $description = 'super !';
-        $required = false;
-        $min = 10;
-        $max = 11;
+        $required    = false;
+        $min         = 10;
+        $max         = 11;
 
         $sUT->setId($id);
         $sUT->setType($type);

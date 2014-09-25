@@ -11,13 +11,13 @@ class AllPropsTest extends \PHPUnit_Framework_TestCase
     {
         $sUT = new Schema();
 
-        $description = 'im';
+        $description  = 'im';
         $dollarSchema = 'a';
-        $id = 'test';
-        $mediaType = ',';
-        $required = 'very';
-        $title = 'super';
-        $type = 'efficient';
+        $id           = 'test';
+        $mediaType    = ',';
+        $required     = 'very';
+        $title        = 'super';
+        $type         = 'efficient';
 
         $sUT->setDescription($description);
         $sUT->setDollarSchema($dollarSchema);

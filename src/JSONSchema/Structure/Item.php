@@ -89,7 +89,7 @@ class Item
      */
     public function addProperty($key, Property $value, $overwrite = true)
     {
-        if (array_key_exists($key, $this->properties) && $overwrite === false) {
+        if (array_key_exists($key, $this->properties) === true && $overwrite === false) {
             throw new Exceptions\OverwriteKeyException();
         }
 
@@ -153,7 +153,7 @@ class Item
         );
 
         if (count($this->properties) !== 0) {
-            $array['properties']  = array();
+            $array['properties'] = array();
             foreach($this->properties as $key => $property) {
                 $array['properties'][$key] = $property->toObject();
             }

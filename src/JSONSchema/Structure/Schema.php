@@ -44,7 +44,7 @@ class Schema
     /**
      * @var string
      */
-    protected $dollarSchema  = 'http://json-schema.org/draft-04/schema';
+    protected $dollarSchema = 'http://json-schema.org/draft-04/schema';
 
     /**
      * the ID is a string reference to the resource that is identified in this document
