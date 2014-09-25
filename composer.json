@@ -1,32 +1,33 @@
 {
-	"name" : "fezfez/php-json-schema-generator",
-	"type" : "library",
-	"description" : "A JSON Schema Generator written in PHP. The implementation is based on current internet drafts.",
-	"keywords" : [
-		"PHP",
-		"JSON",
-		"Schema",
-		"generator"
-		"parser"
-	],
-	"homepage" : "https://github.com/fezfez/php-json-schema-generator",
-	"license" : "MIT",
-	"authors" : [{
-			"name" : "Steven Scott",
-			"email" : "steve@openfoc.us"
-		}
-	],
-	"require" : {
-		"php" : ">=5.4.0"
-	},
-	"require-dev" : {
-		"justinrainbow/json-schema" : "*",
-		"phpunit/phpunit" : "4.2.*"
-	},
-	"autoload" : {
-		"psr-0" : {
-			"JSONSchema\\Tests" : "tests/",
-			"JSONSchema" : "src/"
-		}
-	}
+    "name": "fezfez/php-json-schema-generator",
+    "type": "library",
+    "description": "A JSON Schema Generator written in PHP. The implementation is based on current internet drafts.",
+    "keywords": [
+        "PHP",
+        "JSON",
+        "Schema",
+        "generator",
+        "parser"
+    ],
+    "homepage": "https://github.com/fezfez/php-json-schema-generator",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Steven Scott",
+            "email": "steve@openfoc.us"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "require-dev": {
+        "justinrainbow/json-schema": "*",
+        "phpunit/phpunit": "4.2.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "JSONSchema\\Tests": "tests/",
+            "JSONSchema": "src/"
+        }
+    }
 }
