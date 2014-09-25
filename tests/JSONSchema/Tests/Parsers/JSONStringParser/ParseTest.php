@@ -2,6 +2,7 @@
 namespace JSONSchema\Tests\Parsers\JSONStringParse;
 
 use JSONSchema\Parsers\JSONStringParser;
+use JsonSchema\Validator;
 
 class ParseTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,11 +26,23 @@ class ParseTest extends \PHPUnit_Framework_TestCase
         $sUT = new JSONStringParser();
 
         $config = array(
-            'fake' => 'config',
-            'schema_dollarSchema' => 'mySchema'
+            'fake' => 'config'
         );
 
-        $this->assertInstanceOf('JSONSchema\Structure\Schema', $sUT->parse('{"test" : "toto"}', $config));
+        $json = '{"test" : "toto"}';
+        $validator = new Validator();
+
+        $results = $sUT->parse($json, $config);
+        $this->assertInstanceOf('JSONSchema\Structure\Schema', $results);
+
+        $validator->check(json_decode($json), $results->toObject());
+
+        $this->assertTrue(
+            $validator->isValid(),
+            "\n Error : " . json_encode($validator->getErrors()) .
+            "\njson : " . $json .
+            "\nschema : " . $results->toString()
+        );
     }
 
     public function testStringRepresentation()
@@ -54,10 +67,23 @@ class ParseTest extends \PHPUnit_Framework_TestCase
             "float" : 1.2,
             "nullone" : null
         }
-    ]
+    ],
+    "simpleArray": ["test"]
 }';
 
-        $this->assertInternalType('string', $sUT->parse($json, $config)->toString());
+        $validator = new Validator();
+
+        $results = $sUT->parse($json, $config);
+        $this->assertInstanceOf('JSONSchema\Structure\Schema', $results);
+
+        $validator->check(json_decode($json), $results->toObject());
+
+        $this->assertTrue(
+            $validator->isValid(),
+            "\n Error : " . json_encode($validator->getErrors()) .
+            "\njson : " . $json .
+            "\nschema : " . $results->toString()
+        );
     }
 
     public function testArrayRepresentation()
@@ -73,19 +99,30 @@ class ParseTest extends \PHPUnit_Framework_TestCase
 
     public function testComplex()
     {
-        $sUT = new JSONStringParser();
+        $jsonArray = array(
+            DATA_PATH . 'example.address1.json',
+            DATA_PATH . 'example.address2.json',
+            DATA_PATH . 'facebook-data.json'
+        );
 
-        $this->assertInstanceOf(
-            'JSONSchema\Structure\Schema',
-            $sUT->parse(file_get_contents(DATA_PATH . 'example.address1.json'))
-        );
-        $this->assertInstanceOf(
-            'JSONSchema\Structure\Schema',
-            $sUT->parse(file_get_contents(DATA_PATH . 'example.address2.json'))
-        );
-        $this->assertInstanceOf(
-            'JSONSchema\Structure\Schema',
-            $sUT->parse(file_get_contents(DATA_PATH . 'facebook-data.json'))
-        );
+        foreach ($jsonArray as $jsonUrl) {
+            $sUT       = new JSONStringParser();
+            $validator = new Validator();
+            $json      = file_get_contents($jsonUrl);
+            $results   = $sUT->parse($json);
+
+            $this->assertInstanceOf('JSONSchema\Structure\Schema', $results);
+
+            $validator->check(
+                json_decode($json),
+                $results->toObject()
+            );
+            $this->assertTrue(
+                $validator->isValid(),
+                "\n Error : " . json_encode($validator->getErrors()) .
+                "\njson : " . $json .
+                "\nschema : " . $results->toString()
+            );
+        }
     }
 }

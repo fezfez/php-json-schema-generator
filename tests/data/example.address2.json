@@ -21,8 +21,7 @@
 		{
 			"type":"cell",
 			"number":"919 777-1234"
-		},
-        ["block_below"]
+		}
 	],
 	"test" : "string"
 }

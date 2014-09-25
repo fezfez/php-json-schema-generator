@@ -19,10 +19,10 @@ class Property
      *
      * @var string $id
      */
-    protected $id = '';
+    protected $id = null;
 
     /**
-     * @var string $type
+     * @var string
      */
     protected $type = '';
 
@@ -88,16 +88,16 @@ class Property
      */
     protected $items = array();
 
-	/**
-     * @return the $id
+    /**
+     * @return string
      */
     public function getId()
     {
         return $this->id;
     }
 
-	/**
-     * @return the $type
+    /**
+     * @return string
      */
     public function getType()
     {
@@ -297,36 +297,38 @@ class Property
      * @param string $parentId - identifier for the parent element
      * @return array fields
      */
-    public function loadFields($parentId = null)
+    public function toObject($parentId = null)
     {
-        $array = array(
-            'id'          => $this->id ? $this->getId() : $parentId . '/' . $this->name,
-            'type'        => $this->type,
-            'required'    => $this->required,
-            'title'       => $this->title,
-            'description' => $this->description,
-            'type'        => $this->type,
-            'key'         => $this->key,
-            'items'       => array(),
-            'properties'  => array()
-        );
+        $stdClass = new \stdClass();
 
-        if($array['type'] === PropertyTypeMapper::INTEGER_TYPE ||
-           $array['type'] === PropertyTypeMapper::NUMBER_TYPE )
+        $stdClass->id          = $this->id !== null ? $this->getId() : $parentId . '/' . $this->name;
+        $stdClass->type        = $this->type;
+        $stdClass->required    = $this->required;
+        $stdClass->title       = $this->title;
+        $stdClass->description = $this->description;
+
+        if($stdClass->type === PropertyTypeMapper::INTEGER_TYPE ||
+           $stdClass->type === PropertyTypeMapper::NUMBER_TYPE )
         {
-            if(empty($this->min) === false) $array['min'] = $this->getMin();
-            if(empty($this->max) === false) $array['max'] = $this->getMax();
+            if(empty($this->min) === false) $stdClass->min = $this->getMin();
+            if(empty($this->max) === false) $stdClass->max = $this->getMax();
         }
 
-        foreach($this->getItems() as $key => $item) {
-            $array['items'][] = $item->loadFields($this->id);
+        if (count($this->items) !== 0) {
+            $stdClass->items = array();
+            foreach($this->items as $key => $item) {
+                $stdClass->items[] = $item->toObject($this->id);
+            }
         }
 
-        foreach($this->getProperties() as $key => $property) {
-            $array['properties'][$key] = $property->loadFields($this->id);
+        if (count($this->properties) !== 0) {
+            $stdClass->properties  = array();
+            foreach($this->properties as $key => $property) {
+                $stdClass->properties[$key] = $property->toObject($this->id);
+            }
         }
 
-        return $array;
+        return $stdClass;
     }
 
 }

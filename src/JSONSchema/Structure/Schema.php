@@ -330,32 +330,46 @@ class Schema
     }
 
     /**
-     * Main schema generation utility
-     *
-     * @return array list of fields and values including the properties/items
+     * A array representation of Schema
+     * @return string
      */
     public function toArray()
     {
+        return (array) $this->toObject();
+    }
+
+    /**
+     * Main schema generation utility
+     *
+     * @return \stdClass
+     */
+    public function toObject()
+    {
         $array = array(
+            '$schema'     => $this->dollarSchema,
             'id'          => $this->id,
-            'schema'      => $this->dollarSchema,
-            'required'    => $this->required,
+            'type'        => $this->type,
             'title'       => $this->title,
             'description' => $this->description,
-            'type'        => $this->type,
-            'mediaType'   => $this->mediaType,
-            'items'       => array(),
-            'properties'  => array()
+            'mediaType'   => $this->mediaType
         );
 
-        foreach($this->getItems() as $key => $item) {
-            $array['items'][] = $item->loadFields($this->id);
+        if (count($this->items) !== 0) {
+            $array['items'] = array();
+            foreach($this->items as $key => $item) {
+                $array['items'][] = $item->toObject($this->id);
+            }
         }
 
-        foreach($this->getProperties() as $key => $property) {
-            $array['properties'][$key] = $property->loadFields();
+        if (count($this->properties) !== 0) {
+            $array['properties']  = array();
+            foreach($this->properties as $key => $property) {
+                $array['properties'][$key] = $property->toObject();
+            }
         }
 
-        return $array;
+        $array['required'] = $this->required;
+
+        return (object) $array;
     }
 }
