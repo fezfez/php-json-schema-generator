@@ -1,8 +1,6 @@
 <?php
 namespace JSONSchema\Structure;
 
-use JSONSchema\Mappers\PropertyTypeMapper;
-
 /**
  * Represents an Item or Element as defined
  * JSON Array Item

@@ -10,8 +10,6 @@ namespace JSONSchema\Structure;
  * @author steven
  *
  */
-use JSONSchema\Mappers\PropertyTypeMapper;
-
 class Schema
 {
 

@@ -1,9 +1,7 @@
 <?php
 namespace JSONSchema\Parsers;
 
-use JSONSchema\Structure\Property;
 use JSONSchema\Structure\Schema;
-use JSONSchema\Structure\Item;
 
 /**
  * Main parser base class
@@ -21,8 +19,7 @@ abstract class Parser
     protected $schemaObject;
 
     /**
-     * just config settings
-     * TODO add a roster of config items
+     * Config settings
      * @var array $config
      */
     protected $config = array();
