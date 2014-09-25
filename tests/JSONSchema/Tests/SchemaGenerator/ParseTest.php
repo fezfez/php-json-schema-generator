@@ -12,18 +12,24 @@ class ParseTest extends \PHPUnit_Framework_TestCase
         ->disableOriginalConstructor()
         ->getMock();
 
-        $parserMock = $this->getMockForAbstractClass('JSONSchema\Parsers\Parser');
+        $parserMock = $this->getMockBuilder('JSONSchema\Parsers\JSONStringParser')
+        ->disableOriginalConstructor()
+        ->getMock();
+
+        $data = 'my data !';
 
         $parserMock->expects($this->once())
         ->method('parse')
-        ->willReturn(new Schema());
+        ->with($data)
+        ->will($this->returnValue(new Schema()));
 
         $parserFactory->expects($this->once())
         ->method('getParser')
-        ->willReturn($parserMock);
+        ->with($data)
+        ->will($this->returnValue($parserMock));
 
         $sUT = new SchemaGenerator($parserFactory);
 
-        $this->assertInstanceOf('JSONSchema\Structure\Schema', $sUT->parse('my data !'));
+        $this->assertInstanceOf('JSONSchema\Structure\Schema', $sUT->parse($data));
     }
 }

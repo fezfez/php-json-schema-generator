@@ -70,8 +70,8 @@ class JSONStringParser extends Parser
      */
     private function determineProperty($property,$name)
     {
-        $baseUrl         = $this->configKeyExists('baseUrl') ? $this->getConfigSetting('baseUrl') : null ;
-        $requiredDefault = $this->configKeyExists('requiredDefault') ? $this->getConfigSetting('requiredDefault') : false;
+        $baseUrl         = $this->configExists('baseUrl') ? $this->getConfig('baseUrl') : null ;
+        $requiredDefault = $this->configExists('requiredDefault') ? $this->getConfig('requiredDefault') : false;
         $type            = StringMapper::map($property);
 
         if($type === StringMapper::ARRAY_TYPE) {
@@ -84,7 +84,7 @@ class JSONStringParser extends Parser
              ->setKey($name) // due to the limited content ability of the basic json string
              ->setRequired($requiredDefault);
 
-        if(is_null($baseUrl) === false) {
+        if($baseUrl === null) {
             $prop->setId($baseUrl . '/' . $name);
         }
 
@@ -113,8 +113,8 @@ class JSONStringParser extends Parser
      */
     private function determineItem($items, $name)
     {
-        $baseUrl         = $this->configKeyExists('baseUrl') ? $this->getConfigSetting('baseUrl') : null ;
-        $requiredDefault = $this->configKeyExists('requiredDefault') ? $this->getConfigSetting('requiredDefault') : false;
+        $baseUrl         = $this->configExists('baseUrl') ? $this->getConfig('baseUrl') : null ;
+        $requiredDefault = $this->configExists('requiredDefault') ? $this->getConfig('requiredDefault') : false;
         $type            = StringMapper::map($items);
 
         $retItem = new Item();

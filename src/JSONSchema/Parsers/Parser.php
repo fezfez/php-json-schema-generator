@@ -38,27 +38,6 @@ abstract class Parser
     protected $config = array();
 
     /**
-     * @param string $key
-     */
-    public function getConfigSetting($key)
-    {
-        if (isset($this->config[$key]) === false || is_string($key) === false) {
-            throw new InvalidConfigItemException("They key: $key is not set ");
-        }
-
-        return $this->config[$key];
-    }
-
-    /**
-     * @param string $key
-     * @return boolean
-     */
-    public function configKeyExists($key)
-    {
-        return isset($this->config[$key]);
-    }
-
-    /**
      * @param mixed $subject
      * @param array $config
      * @return \JSONSchema\Structure\Schema
@@ -97,23 +76,41 @@ abstract class Parser
     {
         $this->schemaObject = new Schema();
 
-        // namespace is schema_
-        // try to set all the variables for the schema from the supplied config
-        if(isset($this->config['schema_dollarSchema']))
-            $this->schemaObject->setDollarSchema($this->config['schema_dollarSchema']);
+        $configsKeys = array(
+            'schema_dollarSchema' => 'setDollarSchema',
+            'schema_required'     => 'setRequired',
+            'schema_title'        => 'setTitle',
+            'schema_description'  => 'setDescription',
+            'schema_type'         => 'setType'
+        );
 
-        if(isset($this->config['schema_required']))
-            $this->schemaObject->setRequired($this->config['schema_required']);
-
-        if(isset($this->config['schema_title']))
-            $this->schemaObject->setTitle($this->config['schema_title']);
-
-        if(isset($this->config['schema_description']))
-            $this->schemaObject->setDescription($this->config['schema_description']);
-
-        if(isset($this->config['schema_type']))
-            $this->schemaObject->setType($this->config['schema_type']);
+        foreach ($configsKeys as $key => $method) {
+            if(isset($this->config[$key]) === true) {
+                $this->schemaObject->$method($this->config[$key]);
+            }
+        }
 
         return $this;
+    }
+
+    /**
+     * @param string $key
+     */
+    protected function getConfig($key)
+    {
+        if (isset($this->config[$key]) === false || is_string($key) === false) {
+            throw new InvalidConfigItemException("They key: $key is not set ");
+        }
+
+        return $this->config[$key];
+    }
+
+    /**
+     * @param string $key
+     * @return boolean
+     */
+    protected function configExists($key)
+    {
+        return isset($this->config[$key]);
     }
 }
