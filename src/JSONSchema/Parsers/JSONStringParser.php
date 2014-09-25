@@ -108,20 +108,4 @@ class JSONStringParser extends Parser
 
         return $retItem;
     }
-
-    /**
-     * @param string $name
-     * @param mixed $item
-     */
-    private function stackItemFields($name, $item)
-    {
-        // for non-loopables
-        if (is_array($item) === false && is_object($item) === false) {
-            return;
-        }
-
-        foreach( $item as $key => $val) {
-            $this->itemFields[$name][$key] = $val;
-        }
-    }
 }

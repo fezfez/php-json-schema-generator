@@ -314,21 +314,26 @@ class Property
             if(empty($this->max) === false) $stdClass->max = $this->getMax();
         }
 
-        if (count($this->items) !== 0) {
-            $stdClass->items = array();
-            foreach($this->items as $key => $item) {
-                $stdClass->items[] = $item->toObject($this->id);
-            }
-        }
+        $stdClass = $this->hydrateCollection($stdClass, 'items');
+        $stdClass = $this->hydrateCollection($stdClass, 'properties');
 
-        if (count($this->properties) !== 0) {
-            $stdClass->properties  = array();
-            foreach($this->properties as $key => $property) {
-                $stdClass->properties[$key] = $property->toObject($this->id);
+        return $stdClass;
+    }
+
+    /**
+     * @param \stdClass $stdClass
+     * @param string $name
+     * @return stdClass
+     */
+    private function hydrateCollection(\stdClass $stdClass, $name)
+    {
+        if (count($this->$name) !== 0) {
+            $stdClass->$name  = array();
+            foreach($this->$name as $property) {
+                array_push($stdClass->$name, $property->toObject($this->id));
             }
         }
 
         return $stdClass;
     }
-
 }
