@@ -7,7 +7,7 @@ class GetParserTest extends \PHPUnit_Framework_TestCase
 {
     public function testThrowExceptionWhenTypeNoValid()
     {
-        $data = 'my data !';
+        $data       = 'my data !';
         $parserMock = $this->getMockForAbstractClass('JSONSchema\Parsers\Parser');
 
         $parserMock->expects($this->once())
@@ -24,7 +24,7 @@ class GetParserTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnWhenValid()
     {
-        $data = 'my data !';
+        $data       = 'my data !';
         $parserMock = $this->getMockForAbstractClass('JSONSchema\Parsers\Parser');
 
         $parserMock->expects($this->once())

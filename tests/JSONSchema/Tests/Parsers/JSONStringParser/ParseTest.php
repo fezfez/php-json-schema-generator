@@ -29,7 +29,7 @@ class ParseTest extends \PHPUnit_Framework_TestCase
             'fake' => 'config'
         );
 
-        $json = '{"test" : "toto"}';
+        $json      = '{"test" : "toto"}';
         $validator = new Validator();
 
         $results = $sUT->parse($json, $config);

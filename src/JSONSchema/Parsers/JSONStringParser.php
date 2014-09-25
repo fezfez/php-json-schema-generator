@@ -91,8 +91,8 @@ class JSONStringParser extends Parser
     }
 
     /**
-     * @param unknown $items
-     * @param unknown $name
+     * @param mixed $items
+     * @param string $name
      * @return \JSONSchema\Structure\Item
      */
     private function determineItem($items, $name)
@@ -112,10 +112,9 @@ class JSONStringParser extends Parser
     }
 
     /**
-     * @param string $type
      * @param mixed $property
-     * @param Property $prop
-     * @return Ambiguous
+     * @param Item $item
+     * @return Item
      */
     private function determineChildItem($property, Item $item)
     {
