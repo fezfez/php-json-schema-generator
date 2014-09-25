@@ -1,7 +1,9 @@
 # PHP JSON Schema Generator 
 ======================
 
-[![Build Status](https://secure.travis-ci.org/solvire/php-json-schema-generator.png)](http://travis-ci.org/solvire/php-json-schema-generator)
+[![Build Status](https://secure.travis-ci.org/fezfez/php-json-schema-generator.png)](http://travis-ci.org/fezfez/php-json-schema-generator)
+[![Code Coverage](https://scrutinizer-ci.com/g/fezfez/php-json-schema-generator/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/fezfez/php-json-schema-generator/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fezfez/php-json-schema-generator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fezfez/php-json-schema-generator/?branch=master)
 
 Package: php-json-schema-generator
 
@@ -27,25 +29,6 @@ The goal of the tool is to provide an trivial implement for generating a JSON Sc
 * JSON string
   * Defined [RFC 4627](http://tools.ietf.org/html/rfc4627)
   * No validation yet
-
-### Parsers To Be Supported
-* JSON/Schema Object
-  * Loading the Schema + Properties manually
-  * Can be built up easier with an API 
-* Array 
-  * Simple hash
-  * API to load an array 
-  * Will validate the array structure
-* ArrayObject 
-  * Similar to array hash
-* Doctrine Entity
-  * Use the Doctrine 2 infrastructure 
-  * Generate the schema off the doctrine metadata
-  * Map to DB settings
-  * Allow map overrides
-* Extensible Objects
-  * Load user defined parsers
-  * Inherit major functionality  
 
 ## Installation 
 Simple, assuming you use composer. Add the below lines to your composer.json and run composer update.  

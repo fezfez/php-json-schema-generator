@@ -50,7 +50,9 @@ class ParseTest extends \PHPUnit_Framework_TestCase
         $sUT = new JSONStringParser();
 
         $config = array(
-            'fake' => 'config'
+            'fake' => 'config',
+            'schema_dollarSchema' => '',
+            'baseUrl' => 'http://myurl.com'
         );
 
         $json = '

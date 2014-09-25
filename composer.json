@@ -1,16 +1,15 @@
 {
-	"name" : "solvire/php-json-schema-generator",
+	"name" : "fezfez/php-json-schema-generator",
 	"type" : "library",
 	"description" : "A JSON Schema Generator written in PHP. The implementation is based on current internet drafts.",
 	"keywords" : [
 		"PHP",
 		"JSON",
 		"Schema",
-		"generator",
-		"validation",
+		"generator"
 		"parser"
 	],
-	"homepage" : "https://github.com/solvire/php-json-schema-generator",
+	"homepage" : "https://github.com/fezfez/php-json-schema-generator",
 	"license" : "MIT",
 	"authors" : [{
 			"name" : "Steven Scott",
