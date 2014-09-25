@@ -106,7 +106,7 @@ class Property
         return $this->type;
     }
 
-	/**
+    /**
      * @return the $key
      */
     public function getKey()
@@ -114,7 +114,7 @@ class Property
         return $this->key;
     }
 
-	/**
+    /**
      * @return the $name
      */
     public function getName()
@@ -122,7 +122,7 @@ class Property
         return $this->name;
     }
 
-	/**
+    /**
      * @return the $title
      */
     public function getTitle()
@@ -130,7 +130,7 @@ class Property
         return $this->title;
     }
 
-	/**
+    /**
      * @return the $description
      */
     public function getDescription()
@@ -138,7 +138,7 @@ class Property
         return $this->description;
     }
 
-	/**
+    /**
      * @return the $required
      */
     public function getRequired()
@@ -146,7 +146,7 @@ class Property
         return $this->required;
     }
 
-	/**
+    /**
      * @return the $min
      */
     public function getMin()
@@ -154,7 +154,7 @@ class Property
         return $this->min;
     }
 
-	/**
+    /**
      * @return the $max
      */
     public function getMax()
@@ -162,7 +162,7 @@ class Property
         return $this->max;
     }
 
-	/**
+    /**
      * @return the $properties
      */
     public function getProperties()
@@ -170,7 +170,7 @@ class Property
         return $this->properties;
     }
 
-	/**
+    /**
      * @return the $items
      */
     public function getItems()
@@ -178,7 +178,7 @@ class Property
         return $this->items;
     }
 
-	/**
+    /**
      * @param string $id
      */
     public function setId($id)
@@ -187,7 +187,7 @@ class Property
         return $this;
     }
 
-	/**
+    /**
      * @param string $type
      */
     public function setType($type)
@@ -196,7 +196,7 @@ class Property
         return $this;
     }
 
-	/**
+    /**
      * @param string $key
      */
     public function setKey($key)
@@ -205,7 +205,7 @@ class Property
         return $this;
     }
 
-	/**
+    /**
      * @param string $name
      */
     public function setName($name)
@@ -214,7 +214,7 @@ class Property
         return $this;
     }
 
-	/**
+    /**
      * @param string $title
      */
     public function setTitle($title)
@@ -223,7 +223,7 @@ class Property
         return $this;
     }
 
-	/**
+    /**
      * @param string $description
      */
     public function setDescription($description)
@@ -232,7 +232,7 @@ class Property
         return $this;
     }
 
-	/**
+    /**
      * @param boolean $required
      */
     public function setRequired($required = false)
@@ -241,7 +241,7 @@ class Property
         return $this;
     }
 
-	/**
+    /**
      * @param integer $min
      */
     public function setMin($min)
@@ -250,7 +250,7 @@ class Property
         return $this;
     }
 
-	/**
+    /**
      * @param integer $max
      */
     public function setMax($max)
@@ -268,7 +268,7 @@ class Property
      */
     public function addProperty($key, Property $value, $overwrite = true)
     {
-        if (array_key_exists($key, $this->properties) && $overwrite === false) {
+        if (array_key_exists($key, $this->properties) === true && $overwrite === false) {
             throw new Exceptions\OverwriteKeyException();
         }
 
@@ -286,7 +286,7 @@ class Property
      */
     public function addItem($key, Item $value, $overwrite = true)
     {
-        if (array_key_exists($key, $this->items) && $overwrite === false) {
+        if (array_key_exists($key, $this->items) === true && $overwrite === false) {
             throw new Exceptions\OverwriteKeyException();
         }
 
@@ -330,7 +330,7 @@ class Property
     private function hydrateCollection(\stdClass $stdClass, $name)
     {
         if (count($this->$name) !== 0) {
-            $stdClass->$name  = array();
+            $stdClass->$name = array();
             foreach($this->$name as $property) {
                 array_push($stdClass->$name, $property->toObject($this->id));
             }

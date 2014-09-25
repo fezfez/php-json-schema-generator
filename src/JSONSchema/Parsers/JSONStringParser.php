@@ -80,7 +80,7 @@ class JSONStringParser extends Parser
         // since this is an object get the properties of the sub objects
         if ($type === PropertyTypeMapper::ARRAY_TYPE){
             foreach ($property as $data) {
-                $prop->addItem(0, $this->determineItem($data, 0));
+                $prop->addItem('0', $this->determineItem($data, '0'));
             }
         } elseif ($type === PropertyTypeMapper::OBJECT_TYPE) {
             foreach ($property as $key => $newProperty) {

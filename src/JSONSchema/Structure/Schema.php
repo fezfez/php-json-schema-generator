@@ -261,7 +261,7 @@ class Schema
     }
 
     /**
-     * @param integer $id
+     * @param string $id
      * @return \JSONSchema\Structure\Schema
      */
     public function setId($id)
