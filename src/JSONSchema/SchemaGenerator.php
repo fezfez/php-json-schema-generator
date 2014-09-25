@@ -23,7 +23,7 @@ class SchemaGenerator
     /**
      * @var ParserFactory
      */
-    private $parser = null;
+    private $parserFactory = null;
 
     /**
      * @param ParserFactory $parserFactory

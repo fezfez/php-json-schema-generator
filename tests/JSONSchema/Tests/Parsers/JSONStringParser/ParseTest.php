@@ -25,7 +25,8 @@ class ParseTest extends \PHPUnit_Framework_TestCase
         $sUT = new JSONStringParser();
 
         $config = array(
-            'fake' => 'config'
+            'fake' => 'config',
+            'schema_dollarSchema' => 'mySchema'
         );
 
         $this->assertInstanceOf('JSONSchema\Structure\Schema', $sUT->parse('{"test" : "toto"}', $config));

@@ -26,17 +26,22 @@ class Schema
     /**
      * Properties
      *
-     * @var array $properties
+     * @var array
      */
     protected $properties = array();
 
     /**
-     * Special use case
-     * JSON Array
+     * Special use case JSON Array
      *
-     * @var array $items
+     * @var array
      */
     protected $items = array();
+
+    /**
+     * properties or items in a list which are required
+     * @var array
+     */
+    protected $required = array();
 
     /**
      * @var string
@@ -53,18 +58,12 @@ class Schema
     protected $id = 'http://jsonschema.net';
 
     /**
-     * properties or items in a list which are required
-     * @var array $required
+     * @var string
      */
-    protected $required = array();
+    protected $title = '';
 
     /**
-     * @var string $title
-     */
-    protected $title  = '';
-
-    /**
-     * @var string $description
+     * @var string
      */
     protected $description = '';
 
@@ -73,7 +72,7 @@ class Schema
      * Default MUST be object type
      * Section 3.2
      *
-     * @var string $type
+     * @var string
      */
     protected $type = 'object';
 
@@ -92,14 +91,15 @@ class Schema
     /**
      * @param string $key
      * @param string $value
-     * @param boolean $overwrite
-     * @return $this
+     * @param string $overwrite
      * @throws Exceptions\OverwriteKeyException
+     * @return \JSONSchema\Structure\Schema
      */
-    public function addKeyword($key,$value,$overwrite = true)
+    public function addKeyword($key, $value, $overwrite = true)
     {
-        if(!empty($this->keywords[$key]) && !$overwrite)
+        if(array_key_exists($key, $this->keywords) === true && $overwrite === false) {
             throw new Exceptions\OverwriteKeyException();
+        }
 
         $this->keywords[$key] = $value;
         return $this;
@@ -108,14 +108,15 @@ class Schema
     /**
      * @param string $key
      * @param Property $value
-     * @param boolean $overwrite
-     * @return $this
+     * @param string $overwrite
      * @throws Exceptions\OverwriteKeyException
+     * @return \JSONSchema\Structure\Schema
      */
     public function addProperty($key, Property $value, $overwrite = true)
     {
-        if(!empty($this->properties[$key]) && !$overwrite)
+        if(array_key_exists($key, $this->properties) === true && $overwrite === false) {
             throw new Exceptions\OverwriteKeyException();
+        }
 
         $value->setId($this->getId() . '/' . $key);
         $this->properties[$key] = $value;
@@ -124,15 +125,16 @@ class Schema
 
     /**
      * @param string $key
-     * @param string $value
+     * @param Item $value
      * @param boolean $overwrite
-     * @return $this
      * @throws Exceptions\OverwriteKeyException
+     * @return \JSONSchema\Structure\Schema
      */
     public function addItem($key, Item $value, $overwrite = true)
     {
-        if(!empty($this->items[$key]) && !$overwrite)
+        if(array_key_exists($key, $this->items) === true && $overwrite === false) {
             throw new Exceptions\OverwriteKeyException();
+        }
 
         $this->items[$key] = $value;
         return $this;
@@ -140,7 +142,7 @@ class Schema
 
     /**
      * @param string $key
-     * @return $this
+     * @return \JSONSchema\Structure\Schema
      */
     public function removeKeyword($key)
     {
@@ -150,9 +152,8 @@ class Schema
 
     /**
      * @param string $key
-     * @return $this
+     * @return \JSONSchema\Structure\Schema
      */
-
     public function removeProperty($key)
     {
         unset($this->properties[$key]);
@@ -161,9 +162,8 @@ class Schema
 
     /**
      * @param string $key
-     * @return $this
+     * @return \JSONSchema\Structure\Schema
      */
-
     public function removeItem($key)
     {
         unset($this->items[$key]);
@@ -194,9 +194,8 @@ class Schema
         return $this->items;
     }
 
-
     /**
-     * @return the $dollarSchema
+     * @return string
      */
     public function getDollarSchema()
     {
@@ -204,55 +203,56 @@ class Schema
     }
 
     /**
-     * @return $id
+     * @return string
      */
     public function getId()
     {
         return $this->id;
     }
 
-	/**
-     * @return the $required
+    /**
+     * @return array
      */
     public function getRequired()
     {
         return $this->required;
     }
 
-	/**
-     * @return the $title
+    /**
+     * @return string
      */
     public function getTitle()
     {
         return $this->title;
     }
 
-	/**
-     * @return the $description
+    /**
+     * @return string
      */
     public function getDescription()
     {
         return $this->description;
     }
 
-	/**
-     * @return the $type
+    /**
+     * @return string
      */
     public function getType()
     {
         return $this->type;
     }
 
-	/**
-     * @return the $mediaType
+    /**
+     * @return string
      */
     public function getMediaType()
     {
         return $this->mediaType;
     }
 
-	/**
+    /**
      * @param string $dollarSchema
+     * @return \JSONSchema\Structure\Schema
      */
     public function setDollarSchema($dollarSchema)
     {
@@ -261,9 +261,8 @@ class Schema
     }
 
     /**
-     *
-     *
-     * @param string $id
+     * @param integer $id
+     * @return \JSONSchema\Structure\Schema
      */
     public function setId($id)
     {
@@ -271,17 +270,19 @@ class Schema
         return $this;
     }
 
-	/**
-     * @param boolean $required
+    /**
+     * @param string $key
+     * @return \JSONSchema\Structure\Schema
      */
-    public function setRequired($required)
+    public function addRequired($key)
     {
-        $this->required = $required;
+        $this->required[] = $key;
         return $this;
     }
 
-	/**
+    /**
      * @param string $title
+     * @return \JSONSchema\Structure\Schema
      */
     public function setTitle($title)
     {
@@ -289,8 +290,9 @@ class Schema
         return $this;
     }
 
-	/**
+    /**
      * @param string $description
+     * @return \JSONSchema\Structure\Schema
      */
     public function setDescription($description)
     {
@@ -298,8 +300,9 @@ class Schema
         return $this;
     }
 
-	/**
+    /**
      * @param string $type
+     * @return \JSONSchema\Structure\Schema
      */
     public function setType($type)
     {
@@ -307,8 +310,9 @@ class Schema
         return $this;
     }
 
-	/**
+    /**
      * @param string $mediaType
+     * @return \JSONSchema\Structure\Schema
      */
     public function setMediaType($mediaType)
     {
