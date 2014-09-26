@@ -22,7 +22,7 @@ class AllPropsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($id, $sUT->getId());
         $this->assertEquals($type, $sUT->getType());
-        $this->assertEquals($additionalProperties, $sUT->getAdditionalProperties());
+        $this->assertEquals($additionalProperties, $sUT->hasAdditionalProperties());
         $this->assertEquals(array($required), $sUT->getRequired());
     }
 
@@ -42,7 +42,7 @@ class AllPropsTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('JSONSchema\Structure\Exceptions\OverwriteKeyException');
 
-        $sUT->addProperty('test', new Property(), false);
+        $sUT->addProperty('test', new Property(), false, false);
     }
 
     public function testtoObject()

@@ -11,11 +11,6 @@ use JSONSchema\Mappers\PropertyTypeMapper;
  */
 class JSONStringParser extends Parser
 {
-    /**
-     * @var array $itemFields
-     */
-    protected $itemFields = array();
-
     /* (non-PHPdoc)
      * @see \JSONSchema\Parsers\Parser::isValidType()
      */
@@ -40,7 +35,8 @@ class JSONStringParser extends Parser
         foreach($jsonObj as $key => $property) {
             $schema->addProperty(
                 $key,
-                $this->determineProperty($property, $key, $schema)
+                $this->determineProperty($property, $key, $schema),
+                $schema->getConfig()->isRequiredDefault()
             );
         }
 
@@ -54,15 +50,14 @@ class JSONStringParser extends Parser
      */
     private function determineProperty($property, $name, Schema $schema)
     {
-        $baseUrl         = $schema->getConfig()->getBaseUrl();
-        $requiredDefault = $schema->getConfig()->getRequiredDefault();
-        $type            = PropertyTypeMapper::map($property);
+        $baseUrl              = $schema->getConfig()->getBaseUrl();
+        $additionalProperties = $schema->getConfig()->hasAdditionalProperties();
+        $type                 = PropertyTypeMapper::map($property);
 
         $prop = new Property();
         $prop->setType($type)
              ->setName($name)
-             ->setKey($name) // due to the limited content ability of the basic json string
-             ->setRequired($requiredDefault);
+             ->setAdditionalProperties($additionalProperties);
 
         if ($baseUrl !== null) {
             $prop->setId($baseUrl . '/' . $name);
@@ -89,7 +84,11 @@ class JSONStringParser extends Parser
                 $addMethod        = 'add' . $method;
                 $dertermineMethod = 'determine' . $method;
 
-                $prop->$addMethod($key, $this->$dertermineMethod($newProperty, $key, $schema));
+                $prop->$addMethod(
+                    $key,
+                    $this->$dertermineMethod($newProperty, $key, $schema),
+                    $schema->getConfig()->isRequiredDefault()
+                );
             }
         }
 
@@ -103,13 +102,13 @@ class JSONStringParser extends Parser
      */
     private function determineItem($items, $name, Schema $schema)
     {
-        $baseUrl         = $schema->getConfig()->getBaseUrl();
-        $requiredDefault = $schema->getConfig()->getAdditionalProperties();
-        $type            = PropertyTypeMapper::map($items);
+        $baseUrl              = $schema->getConfig()->getBaseUrl();
+        $additionalProperties = $schema->getConfig()->hasAdditionalProperties();
+        $type                 = PropertyTypeMapper::map($items);
 
         $retItem = new Item();
         $retItem->setType($type);
-        $retItem->setAdditionalProperties($requiredDefault);
+        $retItem->setAdditionalProperties($additionalProperties);
 
         if ($baseUrl !== null) {
             $retItem->setId($baseUrl . '/' . $name);
@@ -127,7 +126,11 @@ class JSONStringParser extends Parser
     {
         if (PropertyTypeMapper::map($property) === PropertyTypeMapper::OBJECT_TYPE) {
             foreach (get_object_vars($property) as $key => $itemzz) {
-                $item->addProperty($key, $this->determineProperty($itemzz, $key, $schema));
+                $item->addProperty(
+                    $key,
+                    $this->determineProperty($itemzz, $key, $schema),
+                    $schema->getConfig()->isRequiredDefault()
+                );
             }
         }
 

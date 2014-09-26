@@ -12,31 +12,28 @@ class AllPropsTest extends \PHPUnit_Framework_TestCase
 
         $id          = 'test';
         $type        = 'im';
-        $key         = 'a';
         $name        = ',';
         $title       = 'super';
         $description = 'super !';
-        $required    = false;
+        $required    = 'key';
         $min         = 10;
         $max         = 11;
 
         $sUT->setId($id);
         $sUT->setType($type);
-        $sUT->setKey($key);
         $sUT->setName($name);
         $sUT->setTitle($title);
         $sUT->setDescription($description);
-        $sUT->setRequired($required);
+        $sUT->addRequired($required);
         $sUT->setMin($min);
         $sUT->setMax($max);
 
         $this->assertEquals($id, $sUT->getId());
         $this->assertEquals($type, $sUT->getType());
-        $this->assertEquals($key, $sUT->getKey());
         $this->assertEquals($name, $sUT->getName());
         $this->assertEquals($title, $sUT->getTitle());
         $this->assertEquals($description, $sUT->getDescription());
-        $this->assertEquals($required, $sUT->getRequired());
+        $this->assertEquals(array($required), $sUT->getRequired());
         $this->assertEquals($min, $sUT->getMin());
         $this->assertEquals($max, $sUT->getMax());
     }
@@ -55,7 +52,7 @@ class AllPropsTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('JSONSchema\Structure\Exceptions\OverwriteKeyException');
 
-        $sUT->addItem('test', new Item(), false);
+        $sUT->addItem('test', new Item(), false, false);
     }
 
     public function testPropertiesManipulation()
@@ -74,7 +71,7 @@ class AllPropsTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('JSONSchema\Structure\Exceptions\OverwriteKeyException');
 
-        $sUT->addProperty('test', new Property(), false);
+        $sUT->addProperty('test', new Property(), false, false);
     }
 
     public function testtoObject()

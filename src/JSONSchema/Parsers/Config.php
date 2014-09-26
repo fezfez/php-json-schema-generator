@@ -60,7 +60,7 @@ class Config
     /**
      * @return boolean
      */
-    public function getRequiredDefault()
+    public function isRequiredDefault()
     {
         return $this->requiredDefault;
     }
@@ -68,7 +68,7 @@ class Config
     /**
      * @return boolean
      */
-    public function getAdditionalProperties()
+    public function hasAdditionalProperties()
     {
         return $this->additionalProperties;
     }

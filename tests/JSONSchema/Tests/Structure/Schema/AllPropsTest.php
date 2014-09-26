@@ -14,7 +14,6 @@ class AllPropsTest extends \PHPUnit_Framework_TestCase
         $description  = 'im';
         $dollarSchema = 'a';
         $id           = 'test';
-        $mediaType    = ',';
         $required     = 'very';
         $title        = 'super';
         $type         = 'efficient';
@@ -22,7 +21,6 @@ class AllPropsTest extends \PHPUnit_Framework_TestCase
         $sUT->setDescription($description);
         $sUT->setDollarSchema($dollarSchema);
         $sUT->setId($id);
-        $sUT->setMediaType($mediaType);
         $sUT->addRequired($required);
         $sUT->setTitle($title);
         $sUT->setType($type);
@@ -30,7 +28,6 @@ class AllPropsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($description, $sUT->getDescription());
         $this->assertEquals($dollarSchema, $sUT->getDollarSchema());
         $this->assertEquals($id, $sUT->getId());
-        $this->assertEquals($mediaType, $sUT->getMediaType());
         $this->assertEquals(array($required), $sUT->getRequired());
         $this->assertEquals($title, $sUT->getTitle());
         $this->assertEquals($type, $sUT->getType());
@@ -51,41 +48,16 @@ class AllPropsTest extends \PHPUnit_Framework_TestCase
         $sUT->removeItem('test');
 
         $this->assertSame(0, count($sUT->getItems()));
+        $this->assertSame(0, count($sUT->getRequired()));
 
-        $sUT->addItem('test', new Item(), false);
+        $sUT->addItem('test', new Item(), true);
 
         $this->assertSame(1, count($sUT->getItems()));
+        $this->assertSame(1, count($sUT->getRequired()));
 
         $this->setExpectedException('JSONSchema\Structure\Exceptions\OverwriteKeyException');
 
-        $sUT->addItem('test', new Item(), false);
-    }
-
-    public function testKeywordManipulation()
-    {
-        $sUT = new Schema();
-
-        $sUT->addKeyword('test', 'myval');
-
-        $items = $sUT->getKeywords();
-
-        $this->assertSame(1, count($items));
-
-        $sUT->addKeyword('test', 'myval2');
-
-        $this->assertSame(1, count($sUT->getKeywords()));
-
-        $sUT->removeKeyword('test');
-
-        $this->assertSame(0, count($sUT->getKeywords()));
-
-        $sUT->addKeyword('test', 'myval', false);
-
-        $this->assertSame(1, count($sUT->getKeywords()));
-
-        $this->setExpectedException('JSONSchema\Structure\Exceptions\OverwriteKeyException');
-
-        $sUT->addKeyword('test', 'myval3', false);
+        $sUT->addItem('test', new Item(), false, false);
     }
 
     public function testPropertiesManipulation()
@@ -98,21 +70,24 @@ class AllPropsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(1, count($items));
 
-        $sUT->addProperty('test', new Property());
+        $sUT->addProperty('test', new Property(), true);
 
         $this->assertSame(1, count($sUT->getProperties()));
+        $this->assertSame(1, count($sUT->getRequired()));
 
         $sUT->removeProperty('test');
 
         $this->assertSame(0, count($sUT->getProperties()));
+        $this->assertSame(0, count($sUT->getRequired()));
 
-        $sUT->addProperty('test', new Property(), false);
+        $sUT->addProperty('test', new Property(), true);
 
         $this->assertSame(1, count($sUT->getProperties()));
+        $this->assertSame(1, count($sUT->getRequired()));
 
         $this->setExpectedException('JSONSchema\Structure\Exceptions\OverwriteKeyException');
 
-        $sUT->addProperty('test', new Property(), false);
+        $sUT->addProperty('test', new Property(), false, false);
     }
 
     public function testToString()
@@ -120,7 +95,6 @@ class AllPropsTest extends \PHPUnit_Framework_TestCase
         $sUT = new Schema();
 
         $sUT->addProperty('test', new Property());
-        $sUT->addKeyword('test', 'myval2');
         $sUT->addItem('test', new Item());
 
         $this->assertInternalType('string', $sUT->toString());
@@ -131,7 +105,6 @@ class AllPropsTest extends \PHPUnit_Framework_TestCase
         $sUT = new Schema();
 
         $sUT->addProperty('test', new Property());
-        $sUT->addKeyword('test', 'myval2');
         $sUT->addItem('test', new Item());
 
         $this->assertInternalType('array', $sUT->toArray());
