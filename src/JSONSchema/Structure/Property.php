@@ -30,13 +30,6 @@ class Property extends AbstractStructure
     private $max = 0;
 
     /**
-     * sub properties
-     *
-     * @var array
-     */
-    private $properties = array();
-
-    /**
      * sub items
      *
      * @var array

@@ -108,6 +108,7 @@ class JSONStringParser extends Parser
 
         $retItem = new Item();
         $retItem->setType($type);
+        $retItem->setName($name);
         $retItem->setAdditionalProperties($additionalProperties);
 
         if ($baseUrl !== null) {
