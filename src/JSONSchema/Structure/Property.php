@@ -11,7 +11,7 @@ use JSONSchema\Mappers\PropertyTypeMapper;
  * @author steven
  *
  */
-class Property
+class Property extends AbstractStructure
 {
     /**
      * link to the resource identifier
@@ -144,7 +144,7 @@ class Property
     }
 
     /**
-     * @return number
+     * @return integer
      */
     public function getMin()
     {
@@ -152,7 +152,7 @@ class Property
     }
 
     /**
-     * @return number
+     * @return integer
      */
     public function getMax()
     {
@@ -325,8 +325,8 @@ class Property
         );
 
         $array = $this->hydrateNumericTypes($array);
-        $array = $this->hydrateCollection($array, 'items');
-        $array = $this->hydrateCollection($array, 'properties');
+        $array = $this->hydrateCollection($this->items, $array, 'items');
+        $array = $this->hydrateCollection($this->properties, $array, 'properties');
 
         return (object) $array;
     }
@@ -342,23 +342,6 @@ class Property
         if (in_array($array['type'], $numericType) === true) {
             if(empty($this->min) === false) $array['min'] = $this->getMin();
             if(empty($this->max) === false) $array['max'] = $this->getMax();
-        }
-
-        return $array;
-    }
-
-    /**
-     * @param array $array
-     * @param string $name
-     * @return array
-     */
-    private function hydrateCollection(array $array, $name)
-    {
-        if (count($this->$name) !== 0) {
-            $array[$name] = array();
-            foreach($this->$name as $key => $property) {
-                $array[$name][$key] = $property->toObject($this->id);
-            }
         }
 
         return $array;

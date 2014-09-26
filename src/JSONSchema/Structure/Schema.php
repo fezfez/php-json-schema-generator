@@ -12,9 +12,8 @@ use JSONSchema\Parsers\Config;
  * @author steven
  *
  */
-class Schema
+class Schema extends AbstractStructure
 {
-
     /**
      * From section 3.2
      * Object members are keywords
@@ -339,29 +338,11 @@ class Schema
     }
 
     /**
-     * A string representation of this Schema
-     * @return string
-     */
-    public function toString()
-    {
-        return json_encode($this->toArray(), JSON_PRETTY_PRINT);
-    }
-
-    /**
-     * A array representation of Schema
-     * @return string
-     */
-    public function toArray()
-    {
-        return (array) $this->toObject();
-    }
-
-    /**
      * Main schema generation utility
      *
      * @return \stdClass
      */
-    public function toObject()
+    public function toObject($parentId = null)
     {
         $array = array(
             '$schema'     => $this->dollarSchema,
@@ -372,28 +353,11 @@ class Schema
             'mediaType'   => $this->mediaType
         );
 
-        $array = $this->hydrateCollection($array, 'items');
-        $array = $this->hydrateCollection($array, 'properties');
+        $array = $this->hydrateCollection($this->items, $array, 'items');
+        $array = $this->hydrateCollection($this->properties, $array, 'properties');
 
         $array['required'] = $this->required;
 
         return (object) $array;
-    }
-
-    /**
-     * @param array $array
-     * @param string $name
-     * @return array
-     */
-    private function hydrateCollection(array $array, $name)
-    {
-        if (count($this->$name) !== 0) {
-            $array[$name] = array();
-            foreach($this->$name as $key => $property) {
-                $array[$name][$key] = $property->toObject($this->id);
-            }
-        }
-
-        return $array;
     }
 }

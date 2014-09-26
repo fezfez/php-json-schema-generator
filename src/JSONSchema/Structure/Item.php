@@ -10,7 +10,7 @@ namespace JSONSchema\Structure;
  * @author steven
  *
  */
-class Item
+class Item extends AbstractStructure
 {
     /**
      * link to the resource identifier
@@ -153,12 +153,7 @@ class Item
             'additionalProperties' => $this->additionalProperties
         );
 
-        if (count($this->properties) !== 0) {
-            $array['properties'] = array();
-            foreach($this->properties as $key => $property) {
-                $array['properties'][$key] = $property->toObject();
-            }
-        }
+        $array = $this->hydrateCollection($this->properties, $array, 'properties');
 
         $array['required'] = $this->required;
 
