@@ -2,6 +2,7 @@
 namespace JSONSchema\Structure;
 
 use JSONSchema\Parsers\Config;
+
 /**
  * A JSON document
  * Represents the body of the schema
@@ -80,12 +81,6 @@ class Schema
      * @var string
      */
     private $mediaType = 'application/schema+json';
-
-    /**
-     * during the return it can clean up empty fields
-     * @var boolean
-     */
-    private $pruneEmptyFields = true;
 
     /**
      * @var Config

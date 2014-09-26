@@ -316,10 +316,10 @@ class Property
             if(empty($this->max) === false) $array['max'] = $this->getMax();
         }
 
-        $stdClass = $this->hydrateCollection($array, 'items');
-        $stdClass = $this->hydrateCollection($array, 'properties');
+        $array = $this->hydrateCollection($array, 'items');
+        $array = $this->hydrateCollection($array, 'properties');
 
-        return (object) $stdClass;
+        return (object) $array;
     }
 
     /**

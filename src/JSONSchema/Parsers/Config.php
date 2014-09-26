@@ -50,7 +50,7 @@ class Config
     }
 
     /**
-     * @param string $key
+     * @return string
      */
     public function getBaseUrl()
     {
@@ -65,6 +65,9 @@ class Config
         return $this->requiredDefault;
     }
 
+    /**
+     * @return boolean
+     */
     public function getAdditionalProperties()
     {
         return $this->additionalProperties;
