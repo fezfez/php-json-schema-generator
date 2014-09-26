@@ -3,6 +3,7 @@ namespace JSONSchema\Tests\Parsers\JSONStringParse;
 
 use JSONSchema\Parsers\JSONStringParser;
 use JsonSchema\Validator;
+use JSONSchema\Parsers\Config;
 
 class ParseTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,12 +24,8 @@ class ParseTest extends \PHPUnit_Framework_TestCase
 
     public function testParsingWithConfig()
     {
-        $sUT = new JSONStringParser();
-
-        $config = array(
-            'fake' => 'config'
-        );
-
+        $sUT       = new JSONStringParser();
+        $config    = new Config();
         $json      = '{"test" : "toto"}';
         $validator = new Validator();
 
@@ -49,11 +46,9 @@ class ParseTest extends \PHPUnit_Framework_TestCase
     {
         $sUT = new JSONStringParser();
 
-        $config = array(
-            'fake' => 'config',
-            'schema_dollarSchema' => '',
-            'baseUrl' => 'http://myurl.com'
-        );
+        $config = new Config();
+        $config->setBaseUrl('http://myurl.com');
+        $config->setRequiredDefault(true);
 
         $json = '
 {
@@ -92,9 +87,9 @@ class ParseTest extends \PHPUnit_Framework_TestCase
     {
         $sUT = new JSONStringParser();
 
-        $config = array(
-            'fake' => 'config'
-        );
+        $config = new Config();
+        $config->setAdditionalProperties(false);
+
 
         $this->assertInternalType('array', $sUT->parse('{"test" : "toto"}', $config)->toArray());
     }

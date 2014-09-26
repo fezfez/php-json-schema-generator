@@ -13,46 +13,21 @@ use JSONSchema\Structure\Schema;
 abstract class Parser
 {
     /**
-     * place holder for the schema object
-     * @var \JSONSchema\Structure\Schema $schemaObject
-     */
-    protected $schemaObject;
-
-    /**
-     * Config settings
-     * @var array $config
-     */
-    protected $config = array();
-
-    /**
      * @param mixed $subject
-     * @param array $config
+     * @param Config $config
      * @return \JSONSchema\Structure\Schema
      */
-    public function parse($subject, array $config = array())
+    public function parse($subject, Config $config = null)
     {
-        $this->config = $config;
-
         $schemaObject = new Schema();
-
-        $configsKeys = array(
-            'schema_dollarSchema' => 'setDollarSchema',
-            'schema_title'        => 'setTitle',
-            'schema_description'  => 'setDescription',
-            'schema_type'         => 'setType'
-        );
-
-        foreach ($configsKeys as $key => $method) {
-            if(isset($config[$key]) === true) {
-                $schemaObject->$method($config[$key]);
-            }
-        }
+        $schemaObject->setConfig(($config === null) ? new Config() : $config);
 
         return $this->doParse($subject, $schemaObject);
     }
 
     /**
      * @param string $subject
+     * @return Schema
      */
     abstract protected function doParse($subject, Schema $schema);
     /**
@@ -60,16 +35,4 @@ abstract class Parser
      * @return boolean
      */
     abstract public function isValidType($data);
-
-    /**
-     * @param string $key
-     */
-    protected function getConfig($key)
-    {
-        if (array_key_exists($key, $this->config) === false) {
-            return null;
-        }
-
-        return $this->config[$key];
-    }
 }

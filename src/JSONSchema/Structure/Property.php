@@ -301,41 +301,41 @@ class Property
      */
     public function toObject($parentId = null)
     {
-        $stdClass = new \stdClass();
-
-        $stdClass->id          = $this->getId($parentId);
-        $stdClass->type        = $this->type;
-        $stdClass->required    = $this->required;
-        $stdClass->title       = $this->title;
-        $stdClass->description = $this->description;
+        $array = array(
+            'id'          => $this->getId($parentId),
+            'type'        => $this->type,
+            'title'       => $this->title,
+            'description' => $this->description,
+            'required'    => $this->required
+        );
 
         $numericType = array(PropertyTypeMapper::INTEGER_TYPE, PropertyTypeMapper::NUMBER_TYPE);
 
-        if (in_array($stdClass->type, $numericType) === true) {
-            if(empty($this->min) === false) $stdClass->min = $this->getMin();
-            if(empty($this->max) === false) $stdClass->max = $this->getMax();
+        if (in_array($array['type'], $numericType) === true) {
+            if(empty($this->min) === false) $array['min'] = $this->getMin();
+            if(empty($this->max) === false) $array['max'] = $this->getMax();
         }
 
-        $stdClass = $this->hydrateCollection($stdClass, 'items');
-        $stdClass = $this->hydrateCollection($stdClass, 'properties');
+        $stdClass = $this->hydrateCollection($array, 'items');
+        $stdClass = $this->hydrateCollection($array, 'properties');
 
-        return $stdClass;
+        return (object) $stdClass;
     }
 
     /**
-     * @param \stdClass $stdClass
+     * @param array $array
      * @param string $name
-     * @return stdClass
+     * @return array
      */
-    private function hydrateCollection(\stdClass $stdClass, $name)
+    private function hydrateCollection(array $array, $name)
     {
         if (count($this->$name) !== 0) {
-            $stdClass->$name = array();
-            foreach($this->$name as $property) {
-                array_push($stdClass->$name, $property->toObject($this->id));
+            $array[$name] = array();
+            foreach($this->$name as $key => $property) {
+                $array[$name][$key] = $property->toObject($this->id);
             }
         }
 
-        return $stdClass;
+        return $array;
     }
 }

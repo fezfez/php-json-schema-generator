@@ -1,6 +1,7 @@
 <?php
 namespace JSONSchema\Structure;
 
+use JSONSchema\Parsers\Config;
 /**
  * A JSON document
  * Represents the body of the schema
@@ -19,32 +20,32 @@ class Schema
      *
      * @var array
      */
-    protected $keywords = array();
+    private $keywords = array();
 
     /**
      * Properties
      *
      * @var array
      */
-    protected $properties = array();
+    private $properties = array();
 
     /**
      * Special use case JSON Array
      *
      * @var array
      */
-    protected $items = array();
+    private $items = array();
 
     /**
      * properties or items in a list which are required
      * @var array
      */
-    protected $required = array();
+    private $required = array();
 
     /**
      * @var string
      */
-    protected $dollarSchema = 'http://json-schema.org/draft-04/schema';
+    private $dollarSchema = 'http://json-schema.org/draft-04/schema';
 
     /**
      * the ID is a string reference to the resource that is identified in this document
@@ -53,17 +54,17 @@ class Schema
      *
      * @var string $id
      */
-    protected $id = 'http://jsonschema.net';
+    private $id = 'http://jsonschema.net';
 
     /**
      * @var string
      */
-    protected $title = '';
+    private $title = '';
 
     /**
      * @var string
      */
-    protected $description = '';
+    private $description = '';
 
     /**
      * the JSON primitive type
@@ -72,19 +73,24 @@ class Schema
      *
      * @var string
      */
-    protected $type = 'object';
+    private $type = 'object';
 
     /**
      * type of media content
      * @var string
      */
-    protected $mediaType = 'application/schema+json';
+    private $mediaType = 'application/schema+json';
 
     /**
      * during the return it can clean up empty fields
      * @var boolean
      */
-    protected $pruneEmptyFields = true;
+    private $pruneEmptyFields = true;
+
+    /**
+     * @var Config
+     */
+    private $config = null;
 
     /**
      * @param string $key
@@ -249,6 +255,14 @@ class Schema
     }
 
     /**
+     * @return \JSONSchema\Parsers\Config
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
      * @param string $dollarSchema
      * @return \JSONSchema\Structure\Schema
      */
@@ -319,6 +333,17 @@ class Schema
     }
 
     /**
+     * @param Config $config
+     * @return \JSONSchema\Structure\Schema
+     */
+    public function setConfig(Config $config)
+    {
+        $this->config = $config;
+
+        return $this;
+    }
+
+    /**
      * A string representation of this Schema
      * @return string
      */
@@ -369,8 +394,8 @@ class Schema
     {
         if (count($this->$name) !== 0) {
             $array[$name] = array();
-            foreach($this->$name as $property) {
-                array_push($array[$name], $property->toObject($this->id));
+            foreach($this->$name as $key => $property) {
+                $array[$name][$key] = $property->toObject($this->id);
             }
         }
 
