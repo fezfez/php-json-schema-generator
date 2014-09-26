@@ -90,7 +90,6 @@ class ParseTest extends \PHPUnit_Framework_TestCase
         $config = new Config();
         $config->setAdditionalProperties(false);
 
-
         $this->assertInternalType('array', $sUT->parse('{"test" : "toto"}', $config)->toArray());
     }
 

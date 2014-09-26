@@ -381,9 +381,9 @@ class Schema
     }
 
     /**
-     * @param \stdClass $stdClass
+     * @param array $array
      * @param string $name
-     * @return stdClass
+     * @return array
      */
     private function hydrateCollection(array $array, $name)
     {

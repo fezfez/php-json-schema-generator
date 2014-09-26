@@ -13,49 +13,48 @@ use JSONSchema\Mappers\PropertyTypeMapper;
  */
 class Property
 {
-
     /**
      * link to the resource identifier
      *
      * @var string $id
      */
-    protected $id = null;
+    private $id = null;
 
     /**
      * @var string
      */
-    protected $type = '';
+    private $type = '';
 
     /**
      * property key - array like
      * @var string
      */
-    protected $key = '';
+    private $key = '';
 
     /**
      *
      * @var string
      */
-    protected $name = '';
+    private $name = '';
 
     /**
      *
      * @var string
      */
-    protected $title = '';
+    private $title = '';
 
     /**
      *
      * @var string
      */
-    protected $description = '';
+    private $description = '';
 
     /**
      * needs to be allowed to be set as a default config setting
      *
      * @var boolean
      */
-    protected $required = false;
+    private $required = false;
 
     /**
      * When numeric it's integer min or max
@@ -63,7 +62,7 @@ class Property
      *
      * @var integer
      */
-    protected $min = 0;
+    private $min = 0;
 
     /**
      * When numeric it's integer min or max
@@ -71,23 +70,21 @@ class Property
      *
      * @var integer
      */
-    protected $max = 0;
+    private $max = 0;
 
     /**
      * sub properties
      *
      * @var array
      */
-    protected $properties = array();
-
+    private $properties = array();
 
     /**
      * sub items
      *
      * @var array
      */
-    protected $items = array();
-
+    private $items = array();
 
     /**
      * @param string $parentId
@@ -107,7 +104,7 @@ class Property
     }
 
     /**
-     * @return the $key
+     * @return string
      */
     public function getKey()
     {
@@ -115,7 +112,7 @@ class Property
     }
 
     /**
-     * @return the $name
+     * @return string
      */
     public function getName()
     {
@@ -123,7 +120,7 @@ class Property
     }
 
     /**
-     * @return the $title
+     * @return string
      */
     public function getTitle()
     {
@@ -131,7 +128,7 @@ class Property
     }
 
     /**
-     * @return the $description
+     * @return string
      */
     public function getDescription()
     {
@@ -139,7 +136,7 @@ class Property
     }
 
     /**
-     * @return the $required
+     * @return boolean
      */
     public function getRequired()
     {
@@ -147,7 +144,7 @@ class Property
     }
 
     /**
-     * @return the $min
+     * @return number
      */
     public function getMin()
     {
@@ -155,7 +152,7 @@ class Property
     }
 
     /**
-     * @return the $max
+     * @return number
      */
     public function getMax()
     {
@@ -163,7 +160,7 @@ class Property
     }
 
     /**
-     * @return the $properties
+     * @return array
      */
     public function getProperties()
     {
@@ -171,7 +168,7 @@ class Property
     }
 
     /**
-     * @return the $items
+     * @return array
      */
     public function getItems()
     {
@@ -180,82 +177,100 @@ class Property
 
     /**
      * @param string $id
+     * @return \JSONSchema\Structure\Property
      */
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
     /**
      * @param string $type
+     * @return \JSONSchema\Structure\Property
      */
     public function setType($type)
     {
         $this->type = $type;
+
         return $this;
     }
 
     /**
      * @param string $key
+     * @return \JSONSchema\Structure\Property
      */
     public function setKey($key)
     {
         $this->key = $key;
+
         return $this;
     }
 
     /**
      * @param string $name
+     * @return \JSONSchema\Structure\Property
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
     /**
      * @param string $title
+     * @return \JSONSchema\Structure\Property
      */
     public function setTitle($title)
     {
         $this->title = $title;
+
         return $this;
     }
 
     /**
      * @param string $description
+     * @return \JSONSchema\Structure\Property
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
     /**
      * @param boolean $required
+     * @return \JSONSchema\Structure\Property
      */
     public function setRequired($required = false)
     {
         $this->required = $required;
+
         return $this;
     }
 
     /**
      * @param integer $min
+     * @return \JSONSchema\Structure\Property
      */
     public function setMin($min)
     {
         $this->min = $min;
+
         return $this;
     }
 
     /**
      * @param integer $max
+     * @return \JSONSchema\Structure\Property
      */
     public function setMax($max)
     {
         $this->max = $max;
+
         return $this;
     }
 
@@ -263,7 +278,7 @@ class Property
      * @param string $key
      * @param Property $value
      * @param boolean $overwrite
-     * @return $this
+     * @return \JSONSchema\Structure\Property
      * @throws Exceptions\OverwriteKeyException
      */
     public function addProperty($key, Property $value, $overwrite = true)
@@ -281,7 +296,7 @@ class Property
      * @param string $key
      * @param Item $value
      * @param boolean $overwrite
-     * @return $this
+     * @return \JSONSchema\Structure\Property
      * @throws Exceptions\OverwriteKeyException
      */
     public function addItem($key, Item $value, $overwrite = true)
@@ -297,7 +312,7 @@ class Property
 
     /**
      * @param string $parentId - identifier for the parent element
-     * @return array fields
+     * @return \stdClass
      */
     public function toObject($parentId = null)
     {
@@ -309,6 +324,19 @@ class Property
             'required'    => $this->required
         );
 
+        $array = $this->hydrateNumericTypes($array);
+        $array = $this->hydrateCollection($array, 'items');
+        $array = $this->hydrateCollection($array, 'properties');
+
+        return (object) $array;
+    }
+
+    /**
+     * @param array $array
+     * @return $array
+     */
+    private function hydrateNumericTypes(array $array)
+    {
         $numericType = array(PropertyTypeMapper::INTEGER_TYPE, PropertyTypeMapper::NUMBER_TYPE);
 
         if (in_array($array['type'], $numericType) === true) {
@@ -316,10 +344,7 @@ class Property
             if(empty($this->max) === false) $array['max'] = $this->getMax();
         }
 
-        $array = $this->hydrateCollection($array, 'items');
-        $array = $this->hydrateCollection($array, 'properties');
-
-        return (object) $array;
+        return $array;
     }
 
     /**

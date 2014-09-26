@@ -69,9 +69,10 @@ class Item
 
         return $this;
     }
+
     /**
      * @param string $key
-     * @return \JSONSchema\Structure\Schema
+     * @return \JSONSchema\Structure\Item
      */
     public function addRequired($key)
     {

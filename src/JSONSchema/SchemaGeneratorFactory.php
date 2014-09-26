@@ -2,7 +2,6 @@
 
 namespace JSONSchema;
 
-use JSONSchema\Parsers\Parser;
 use JSONSchema\Parsers\ParserFactory;
 use JSONSchema\Parsers\JSONStringParser;
 
