@@ -5,6 +5,7 @@
 [![HHVM Status](http://hhvm.h4cc.de/badge/fezfez/php-json-schema-generator.svg)](http://hhvm.h4cc.de/package/fezfez/php-json-schema-generator)
 [![Code Coverage](https://scrutinizer-ci.com/g/fezfez/php-json-schema-generator/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/fezfez/php-json-schema-generator/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fezfez/php-json-schema-generator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fezfez/php-json-schema-generator/?branch=master)
+[![Project Status](http://stillmaintained.com/fezfez/php-json-schema-generator.png)](http://stillmaintained.com/fezfez/php-json-schema-generator)
 
 Package: php-json-schema-generator
 
